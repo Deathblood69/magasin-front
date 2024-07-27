@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "id": "09f9d2d1-fbd2-4df3-915d-eaa8a3dd5bd3",
+      "name": "BALARD"
+    }
+  ],
+  "meta": {
+    "itemsPerPage": 20,
+    "totalItems": 1,
+    "currentPage": 1,
+    "totalPages": 1,
+    "sortBy": [
+      [
+        "name",
+        "ASC"
+      ]
+    ]
+  }
+}

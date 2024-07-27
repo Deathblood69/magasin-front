@@ -1,0 +1,166 @@
+include:
+  - project: $CATALOG_PATH
+    file:
+      - vault-ci.yml
+      - kaniko-ci.yml
+    ref: main
+  - project: forge-mi/projects/ma/poibalard/poi-balard
+    ref: main
+    file:
+      - .gitlab/includes/poi.yml
+
+stages:
+  - init
+  - npm
+  - build
+  - test
+  - docker
+
+cache:
+    paths:
+      - node_modules
+      - .output
+
+variables:
+
+  DOCKERFILE: Dockerfile
+
+init-vault:
+  stage: init
+  extends:
+    - .vault:read_secret
+
+init:
+  stage: init
+  image: node:lts
+  script:
+    - export PGPASSWORD=$POSTGRES_PASSWORD
+    - echo "VERSION_VARIABLE=$(echo $(grep -Po '(?<=\"version\".{1} )\"[0-9\\.]+\"' package.json | sed 's/\"//g'))" >> build.env
+    - echo "$VERSION_VARIABLE"
+  artifacts:
+    reports:
+      dotenv: build.env
+
+npm:
+  image: node:lts
+  stage: npm
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - node_modules
+  script:
+    - npm install
+
+build:
+  image: node:lts
+  stage: build
+  script:
+    - npm i  nuxt
+    - npm run generate
+  cache:
+    key:
+      files:
+         - package-lock.json
+    paths:
+      - .output
+
+e2eEdge:
+  image: cypress/browsers:node-20.11.0-chrome-121.0.6167.184-1-ff-123.0-edge-121.0.2277.128-1
+  stage: test
+  script:
+    - npm i  nuxt
+    - npm run generate
+    - npm run start:static & npm run cypress:run
+  artifacts:
+    paths:
+      - "/builds/forge-mi/projects/ma/poibalard/poi-front/cypress/screenshots"
+    untracked: false
+    when: on_failure
+    expire_in: 30 days
+
+e2eFirefox:
+  image: cypress/browsers:node-20.11.0-chrome-121.0.6167.184-1-ff-123.0-edge-121.0.2277.128-1
+  stage: test
+  script:
+    - npm i  nuxt
+    - npm run generate
+    - npm run start:static & npm run cypress:run
+  artifacts:
+    paths:
+      - "/builds/forge-mi/projects/ma/poibalard/poi-front/cypress/screenshots"
+    untracked: false
+    when: on_failure
+    expire_in: 30 days
+
+vitest:
+  image: node:lts
+  stage: test
+  script:
+    - npm i  nuxt
+    - npm run generate
+    - npm run test
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+
+#docker-build-step:
+#  stage: docker
+#  variables:
+#    WORKING_DIR: "."
+#    IMAGE_NAME: poi-front
+#    DOCKERFILE: Dockerfile
+#    TAG: "$CI_COMMIT_BRANCH-${VERSION_VARIABLE}"
+#    REGISTRY_URL: "${QUAY_ROOT_URL}/ma-poibalard"
+#  extends:
+#    - .kaniko:build
+#  except:
+#    - stable
+#    - dev
+#
+#docker-operateur-build-step:
+#  stage: docker
+#  variables:
+#    WORKING_DIR: "."
+#    IMAGE_NAME: poi-front-operateur
+#    DOCKERFILE: operateur.dockerfile
+#    TAG: "$CI_COMMIT_BRANCH-${VERSION_VARIABLE}"
+#    REGISTRY_URL: "${QUAY_ROOT_URL}/ma-poibalard"
+#  extends:
+#    - .kaniko:build
+#  except:
+#    - stable
+#    - dev
+
+docker-build-push:
+  stage: docker
+  extends:
+    - .kaniko:build-push
+    - .conditions-build-branche
+  variables:
+    DOCKERFILE: Dockerfile
+    IMAGE_NAME: poi-front-image
+    IMAGE_VERSION: $VERSION_VARIABLE
+  needs:
+    - job: init
+      artifacts: true
+    - job: init-vault
+      artifacts: true
+    - job: vitest
+    - job: e2eEdge
+    - job: e2eFirefox
+
+docker-operateur-build-push:
+  stage: docker
+  variables:
+    IMAGE_NAME: poi-front-operateur
+    DOCKERFILE: operateur.dockerfile
+    IMAGE_VERSION: $VERSION_VARIABLE
+  needs:
+    - job: init
+      artifacts: true
+    - job: init-vault
+      artifacts: true
+    - job: vitest
+    - job: e2eEdge
+    - job: e2eFirefox
+  extends:
+    - .kaniko:build-push
+    - .conditions-build-branche

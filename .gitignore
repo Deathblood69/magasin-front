@@ -1,0 +1,34 @@
+# Nuxt dev/build outputs
+../vue-reconnaisance-faciale/.env
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Suite au fichier package-lock différent entre le environnements
+# linux et windows, il est désormais ignoré
+package-lock.json
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+#.env
+#.env.*
+!.env.example
+
+# Test related
+**/coverage/**
+**/coverage/
+cypress/screenshots/**

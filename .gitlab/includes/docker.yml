@@ -1,0 +1,35 @@
+.kaniko:build:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  script:
+    - echo $REGISTRY_URL
+    - echo ${QUAY_ROBOT_USERNAME}
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"${QUAY_ROBOT_USERNAME}\",\"password\":\"$QUAY_ROBOT_TOKEN\"}}}" > /kaniko/.docker/config.json
+    - echo /kaniko/.docker/config.json
+    - /kaniko/executor --context="$CI_PROJECT_DIR/$WORKING_DIR" --dockerfile="$CI_PROJECT_DIR/$WORKING_DIR/$DOCKERFILE" --no-push
+
+.kaniko:build-push:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  script:
+    - echo $REGISTRY_URL
+    - echo ${QUAY_ROBOT_USERNAME}
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"${QUAY_ROBOT_USERNAME}\",\"password\":\"$QUAY_ROBOT_TOKEN\"}}}" > /kaniko/.docker/config.json
+    - echo /kaniko/.docker/config.json
+    - /kaniko/executor --context="$CI_PROJECT_DIR/$WORKING_DIR" --dockerfile="$CI_PROJECT_DIR/$WORKING_DIR/$DOCKERFILE" --destination $REGISTRY_URL/$IMAGE_NAME:$TAG
+
+.kaniko:build-push-latest:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  script:
+    - echo $REGISTRY_URL
+    - echo ${QUAY_ROBOT_USERNAME}
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"${QUAY_ROBOT_USERNAME}\",\"password\":\"$QUAY_ROBOT_TOKEN\"}}}" > /kaniko/.docker/config.json
+    - echo /kaniko/.docker/config.json
+    - /kaniko/executor --context="$CI_PROJECT_DIR/$WORKING_DIR" --dockerfile="$CI_PROJECT_DIR/$WORKING_DIR/$DOCKERFILE" --destination $REGISTRY_URL/$IMAGE_NAME:$TAG --destination $REGISTRY_URL/$IMAGE_NAME:latest

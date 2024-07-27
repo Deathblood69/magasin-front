@@ -1,0 +1,76 @@
+{
+  "data": [{
+    "idAnnudef": "r.esident",
+    "firstName": "resident",
+    "lastName": "esident",
+    "CIMS_cardNumber": "01984994",
+    "access": [
+      {
+        "startDate": "1709161200000",
+        "endDate": "1710025200000",
+        "authorized": true,
+        "zone": {
+          "id": "09f9d2d1-fbd2-4df3-915d-eaa8a3dd5bd3",
+          "name": "BALARD"
+        }
+      }
+    ],
+    "disabled": false,
+    "gabarit": {
+      "gabarit": [56, 65, 65]
+    },
+    "isCimsCarte": false
+  },
+    {
+      "idAnnudef": "r.esident2",
+      "firstName": "resident",
+      "lastName": "esident2",
+      "CIMS_cardNumber": "02222222",
+      "access": [
+        {
+          "startDate": "1709161200000",
+          "endDate": "1710025200000",
+          "authorized": true,
+          "zone": {
+            "id": "09f9d2d1-fbd2-4df3-915d-eaa8a3dd5bd3",
+            "name": "BALARD"
+          }
+        }
+      ],
+      "disabled": false,
+      "gabarit": null,
+      "isCimsCarte": true
+    },
+    {
+      "idAnnudef": "r.esident3",
+      "firstName": "resident3",
+      "lastName": "esident3",
+      "CIMS_cardNumber": "01000000",
+      "access": [
+        {
+          "startDate": "1709161200000",
+          "endDate": "1710025200000",
+          "authorized": true,
+          "zone": {
+            "id": "09f9d2d1-fbd2-4df3-915d-eaa8a3dd5bd3",
+            "name": "BALARD"
+          }
+        }
+      ],
+      "disabled": false,
+      "gabarit": null,
+      "isCimsCarte": true
+    }],
+  "meta": {
+    "itemsPerPage": 20,
+    "totalItems": 0,
+    "currentPage": 1,
+    "totalPages": 0,
+    "sortBy": [
+      [
+        "idAnnudef",
+        "ASC"
+      ]
+    ]
+  }
+}
