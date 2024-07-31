@@ -1,26 +1,33 @@
 <script setup lang="ts" xmlns="http://www.w3.org/1999/html">
-  import type {MenuItem} from '~/types/menuItem'
-
   /** === PROPS === */
 
   interface Props {
     disabled?: boolean
   }
 
-  const propsMenu = defineProps<Props>()
+  defineProps<Props>()
+
+  const open = defineModel<boolean>({default: false})
+
+  function handleToggleMenu() {
+    open.value = !open.value
+  }
 </script>
 
 <template>
-  <VBtn
-    id="menu-activator"
-    :disabled="disabled"
-  >
-    <slot name="button" />
-  </VBtn>
   <VMenu
-    activator="#menu-activator"
+    v-model="open"
     :close-on-content-click="false"
   >
+    <template v-slot:activator="{props}">
+      <VBtn
+        :disabled="disabled"
+        @click="handleToggleMenu"
+        v-bind="props"
+      >
+        <slot name="button" />
+      </VBtn>
+    </template>
     <slot />
   </VMenu>
 </template>

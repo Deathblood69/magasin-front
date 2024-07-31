@@ -1,41 +1,51 @@
 import {defineStore} from 'pinia'
 import type {Produit} from './produit'
 import {PATHS_API} from '~/constants/pathsAPI.const'
-import type {ItemPanier} from '~/domains/panier/panier'
+import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
 
 export const useProduitStore = defineStore('produit', () => {
-  const config = useRuntimeConfig()
-
-  const selectedProduit = ref<Produit>()
+  const selectedProduit = ref<{
+    id: string
+    produit: Partial<Produit>
+  }>()
 
   const produitsLength = ref<number>(0)
 
-  const {data: produits, refresh} = useFetch<Produit[]>(PATHS_API.produit, {
-    baseURL: config.public.NUXT_BASE_URL,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    watch: false,
-    immediate: false,
-  })
+  const {data: produits, refresh} = useFetchService<Produit[]>(
+    PATHS_API.produit
+  )
 
   onMounted(async () => {
     await refresh()
   })
 
-  function isProduitOutOfStock(produit: ItemPanier) {
-    console.log(produit)
-    return produits.value?.some(
-      (produitStock) => produitStock.stock <= produit?.quantite,
-    )
+  function findProduitInStock(nom: string) {
+    return produits.value?.find((e) => e.nom === nom)
+  }
+
+  async function retirerQuantiteProduit(nom: string, quantite: number) {
+    const produit = findProduitInStock(nom)
+
+    if (produit) {
+      await useFetchService<Produit[]>(
+        `${PATHS_API.produit}/${produit?.id}/id`,
+        {
+          method: METHODE_HTTP.PATCH,
+          body: {
+            stock: produit.stock - quantite
+          }
+        }
+      )
+      await refresh()
+    }
   }
 
   return {
     selectedProduit,
     produits,
     produitsLength,
-    refreshTable: refresh,
-    isProduitOutOfStock,
+    refresh,
+    findProduitInStock,
+    retirerQuantiteProduit
   }
 })

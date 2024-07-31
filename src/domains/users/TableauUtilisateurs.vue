@@ -11,10 +11,10 @@
 
   const storeUser = useUserStore()
   const {selectedUser, users, usersLength} = storeToRefs(storeUser)
-  const {refreshTable} = storeUser
+  const {refresh} = storeUser
 
   const dialogs = ref({
-    user: false,
+    user: false
   })
 
   /**
@@ -96,7 +96,7 @@
     v-if="selectedUser"
     v-model:open="dialogs.user"
     v-model:user="selectedUser"
-    @change="refreshTable"
+    @change="refresh"
   />
 </template>
 

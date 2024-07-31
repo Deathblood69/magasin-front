@@ -1,4 +1,6 @@
-export interface Produit {
+import type {EntityInterface} from '~/types/entity'
+
+export interface Produit extends EntityInterface {
   nom: string
   photo: string
   prix: number

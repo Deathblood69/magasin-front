@@ -6,14 +6,15 @@
 
   const {openSnackbar} = useSnackbarStore()
 
-  const produitStore = useProduitStore()
-  const {isProduitOutOfStock} = produitStore
-  const {produits} = storeToRefs(produitStore)
+  const {findProduitInStock} = useProduitStore()
 
   const panierStore = usePanierStore()
-  const {addToPanier, removeFromPanier} = panierStore
-  const {panier, nombreArticles, totalPrix} = storeToRefs(panierStore)
+  const {addToPanier, removeFromPanier, findProduitInPanier, validerPanier} =
+    panierStore
 
+  const openPanier = ref<boolean>(false)
+
+  const {panier, nombreArticles, totalPrix} = storeToRefs(panierStore)
   const items = computed(() => {
     return (
       panier.value?.map((produitPanier) => {
@@ -21,48 +22,59 @@
           title: produitPanier.produit.nom,
           prix: `${produitPanier.produit.prix}€`,
           quantite: produitPanier.quantite,
-          total: `${produitPanier.produit.prix * produitPanier.quantite}€`,
-          disabled: false,
+          total: `${produitPanier.produit.prix * produitPanier.quantite}€`
         }
       }) ?? []
     )
   })
 
-  function findProduit(item: ItemGroup) {
-    return produits?.value?.find((e) => e.nom === item.title)
-  }
-
-  function findProduitInCart(item: ItemGroup) {
-    return panier.value?.find((e) => e.produit.nom === item.title)
+  function isProduitOutOfStock(item: ItemGroup) {
+    const quantiteInStock = findProduitInStock(item.title)?.stock
+    const quantiteInPanier = findProduitInPanier(item.title)?.quantite
+    if (quantiteInStock && quantiteInPanier) {
+      return quantiteInStock <= quantiteInPanier
+    } else {
+      return false
+    }
   }
 
   function handleClickAdd(item: ItemGroup) {
-    const produit = findProduit(item)
+    const produit = findProduitInStock(item.title)
     if (produit) {
       addToPanier(produit)
       openSnackbar('Produit modifié', {
         color: 'success',
-        timeout: 2000,
+        timeout: 2000
       })
     }
   }
 
   function handleClickRemove(item: ItemGroup) {
-    const produit = findProduit(item)
+    const produit = findProduitInStock(item.title)
     if (produit) {
       removeFromPanier(produit)
       openSnackbar('Produit modifié', {
         color: 'success',
-        timeout: 2000,
+        timeout: 2000
       })
     }
   }
 
-  function handleValiderPanier() {}
+  function handleValiderPanier() {
+    validerPanier()
+    openPanier.value = false
+    openSnackbar('Panier validé', {
+      color: 'success',
+      timeout: 2000
+    })
+  }
 </script>
 
 <template>
-  <AppMenu :disabled="nombreArticles === 0">
+  <AppMenu
+    v-model="openPanier"
+    :disabled="nombreArticles === 0"
+  >
     <template #button>
       <VBadge :content="nombreArticles">
         <VIcon
@@ -87,7 +99,7 @@
                   size="small"
                   variant="text"
                   @click="handleClickAdd(item)"
-                  :disabled="item.disabled"
+                  :disabled="isProduitOutOfStock(item)"
                 />
                 <VBtn
                   title="Retirer"
@@ -106,7 +118,7 @@
           </VContainer>
           <VBtn
             text="Payer"
-            variant="plain"
+            variant="flat"
             color="primary"
             @click="handleValiderPanier"
           />

@@ -5,7 +5,7 @@
   "quoteProps": "as-needed",
   "singleAttributePerLine": true,
   "vueIndentScriptAndStyle": true,
-  "trailingComma": "all",
+  "trailingComma": "none",
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true
