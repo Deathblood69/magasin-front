@@ -4,14 +4,13 @@
   import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'
 
-  const LIBELLE_STOCK_VIDE = 'Stock Vide'
-
   const {openSnackbar} = useSnackbarStore()
 
   const produitStore = useProduitStore()
   const {produits} = storeToRefs(produitStore)
 
-  const {addToPanier, findProduitInCart} = usePanierStore()
+  const panierStore = usePanierStore()
+  const {addToPanier} = panierStore
 
   const items = computed(() => {
     return (
@@ -19,7 +18,8 @@
         return {
           title: e.nom,
           description: `${e.prix}€`,
-          image: e.photo.length > 0 ? e.photo : IMAGES.defautSoft,
+          image: e?.photo?.length > 0 ? e.photo : IMAGES.defautSoft,
+          disabled: e.stock === 0,
         } as ItemGroup satisfies ItemGroup
       }) ?? []
     )
@@ -50,7 +50,7 @@
       <VBtn
         icon="mdi-cart-variant"
         @click="handleClickAdd(item)"
-        :disabled="item.description === LIBELLE_STOCK_VIDE"
+        :disabled="item.disabled"
       />
     </template>
   </AppItemGroup>

@@ -7,6 +7,7 @@
   const {openSnackbar} = useSnackbarStore()
 
   const produitStore = useProduitStore()
+  const {isProduitOutOfStock} = produitStore
   const {produits} = storeToRefs(produitStore)
 
   const panierStore = usePanierStore()
@@ -15,12 +16,13 @@
 
   const items = computed(() => {
     return (
-      panier.value?.map((e) => {
+      panier.value?.map((produitPanier) => {
         return {
-          title: e.produit.nom,
-          prix: `${e.produit.prix}€`,
-          quantite: e.quantite,
-          total: `${e.produit.prix * e.quantite}€`,
+          title: produitPanier.produit.nom,
+          prix: `${produitPanier.produit.prix}€`,
+          quantite: produitPanier.quantite,
+          total: `${produitPanier.produit.prix * produitPanier.quantite}€`,
+          disabled: false,
         }
       }) ?? []
     )
@@ -56,13 +58,6 @@
     }
   }
 
-  function checkIfStockVide(item: ItemGroup) {
-    const produitInStock = findProduit(item)
-    const produitInCart = findProduitInCart(item)
-    console.log(produitInCart, produitInStock)
-    return false
-  }
-
   function handleValiderPanier() {}
 </script>
 
@@ -92,7 +87,7 @@
                   size="small"
                   variant="text"
                   @click="handleClickAdd(item)"
-                  :disabled="checkIfStockVide(item)"
+                  :disabled="item.disabled"
                 />
                 <VBtn
                   title="Retirer"

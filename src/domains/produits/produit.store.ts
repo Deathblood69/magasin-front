@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import type {Produit} from './produit'
 import {PATHS_API} from '~/constants/pathsAPI.const'
+import type {ItemPanier} from '~/domains/panier/panier'
 
 export const useProduitStore = defineStore('produit', () => {
   const config = useRuntimeConfig()
@@ -21,8 +22,20 @@ export const useProduitStore = defineStore('produit', () => {
 
   onMounted(async () => {
     await refresh()
-    console.log(produits.value)
   })
 
-  return {selectedProduit, produits, produitsLength, refreshTable: refresh}
+  function isProduitOutOfStock(produit: ItemPanier) {
+    console.log(produit)
+    return produits.value?.some(
+      (produitStock) => produitStock.stock <= produit?.quantite,
+    )
+  }
+
+  return {
+    selectedProduit,
+    produits,
+    produitsLength,
+    refreshTable: refresh,
+    isProduitOutOfStock,
+  }
 })
