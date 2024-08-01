@@ -3,6 +3,7 @@
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import type {ItemGroup} from '~/types/itemGroup'
   import {useProduitStore} from '~/domains/produits/produit.store'
+  import {useClientStore} from '~/domains/client/clients.store'
 
   const {openSnackbar} = useSnackbarStore()
 
@@ -11,6 +12,9 @@
   const panierStore = usePanierStore()
   const {addToPanier, removeFromPanier, findProduitInPanier, validerPanier} =
     panierStore
+
+  const clientStore = useClientStore()
+  const {clients, selectedClient} = storeToRefs(clientStore)
 
   const openPanier = ref<boolean>(false)
 
@@ -60,8 +64,8 @@
     }
   }
 
-  function handleValiderPanier() {
-    validerPanier()
+  async function handleValiderPanier() {
+    await validerPanier()
     openPanier.value = false
     openSnackbar('Panier validé', {
       color: 'success',
@@ -116,6 +120,11 @@
             Total Panier :
             {{ totalPrix }}€
           </VContainer>
+          <AppSelect
+            v-if="clients"
+            :items="clients.map((e) => e.identifiant)"
+            v-model="selectedClient"
+          />
           <VBtn
             text="Payer"
             variant="flat"

@@ -1,9 +1,12 @@
 import type {Produit} from '~/domains/produits/produit'
 import type {ItemPanier} from '~/domains/panier/panier'
 import {useProduitStore} from '~/domains/produits/produit.store'
+import {useClientStore} from '~/domains/client/clients.store'
 
 export const usePanierStore = defineStore('panier', () => {
   const {retirerQuantiteProduit} = useProduitStore()
+
+  const {debiterClient} = useClientStore()
 
   const panier = ref<ItemPanier[]>([])
 
@@ -48,10 +51,11 @@ export const usePanierStore = defineStore('panier', () => {
     )
   }
 
-  function validerPanier() {
-    panier.value.forEach((item) => {
-      retirerQuantiteProduit(item.produit.nom, item.quantite)
-    })
+  async function validerPanier() {
+    await debiterClient(totalPrix.value)
+    for (const item of panier.value) {
+      await retirerQuantiteProduit(item.produit.nom, item.quantite)
+    }
     panier.value = []
   }
 

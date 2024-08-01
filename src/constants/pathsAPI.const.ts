@@ -7,4 +7,6 @@ export enum PATHS_API {
   logout = '/api/auth/logout',
   user = '/api/user',
   produit = '/api/produit',
+  client = '/api/client',
+  solde = '/api/solde'
 }
