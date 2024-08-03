@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 import type {Client} from './client'
 import {PATHS_API} from '~/constants/pathsAPI.const'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-import type {Solde} from '~/domains/client/solde'
+import type {Solde} from '~/domains/clients/solde'
 
 export const useClientStore = defineStore('client', () => {
   const selectedClient = ref<string>()

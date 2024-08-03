@@ -3,7 +3,7 @@
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import type {ItemGroup} from '~/types/itemGroup'
   import {useProduitStore} from '~/domains/produits/produit.store'
-  import {useClientStore} from '~/domains/client/clients.store'
+  import {useClientStore} from '~/domains/clients/clients.store'
 
   const {openSnackbar} = useSnackbarStore()
 
