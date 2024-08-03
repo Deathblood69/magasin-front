@@ -18,6 +18,14 @@ export const DATATABLE_HEADERS = {
     {title: 'Prix total', key: 'total', align: 'start'},
     {title: 'Actions', key: 'actions', align: 'start', sortable: false}
   ] satisfies AppDataTableHeaders,
+  produit: [
+    {title: 'Nom', key: 'nom', align: 'start'},
+    {title: 'Photo', key: 'photo', align: 'start'},
+    {title: 'Prix', key: 'prix', align: 'start'},
+    {title: 'Stock', key: 'stock', align: 'start'},
+    {title: 'Type Produit', key: 'typeProduit', align: 'start'},
+    {title: 'Actions', key: 'actions', align: 'start', sortable: false}
+  ] satisfies AppDataTableHeaders,
   user: [
     {title: 'Nom', key: 'lastName', align: 'start'},
     {title: 'Prénom', key: 'firstName', align: 'start'},
