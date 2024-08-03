@@ -1,10 +1,11 @@
 import {defineStore} from 'pinia'
 import type {Client} from './client'
 import {PATHS_API} from '~/constants/pathsAPI.const'
-import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-import type {Solde} from '~/domains/clients/solde'
+import {useSoldeStore} from '~/domains/solde/solde.store'
 
 export const useClientStore = defineStore('client', () => {
+  const {retirerQuantiteSolde} = useSoldeStore()
+
   const selectedClient = ref<string>()
 
   const clientsLength = ref<number>(0)
@@ -16,26 +17,9 @@ export const useClientStore = defineStore('client', () => {
       const soldeId = clients.value?.find(
         (client) => client.identifiant === selectedClient.value
       )?.solde
-
-      const {data: solde} = await useFetchService<Solde>(
-        `${PATHS_API.solde}/${soldeId}/id`,
-        {
-          method: METHODE_HTTP.GET
-        }
-      )
-
-      if (solde.value) {
-        await useFetchService<Solde[]>(
-          `${PATHS_API.solde}/${solde.value?.id}/id`,
-          {
-            method: METHODE_HTTP.PATCH,
-            body: {
-              valeur: solde.value.valeur - quantite
-            }
-          }
-        )
+      if (soldeId) {
+        await retirerQuantiteSolde(soldeId, quantite)
       }
-      await refresh()
     }
   }
 
