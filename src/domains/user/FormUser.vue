@@ -34,7 +34,7 @@
   const user = computed({
     get: () => props.modelValue as UserInterface | Omit<UserInterface, 'id'>,
     set: (value: UserInterface | Omit<UserInterface, 'id'>) =>
-      emit('update:modelValue', value),
+      emit('update:modelValue', value)
   })
 
   const path = computed(() => {
@@ -42,7 +42,7 @@
   })
 
   const computedIconPassword = computed(() =>
-    passwordVisible.value ? 'mdi-eye' : 'mdi-eye-off',
+    passwordVisible.value ? 'mdi-eye' : 'mdi-eye-off'
   )
 
   //regles de validation de l'identifiant
@@ -65,12 +65,12 @@
   const {
     data: usernameUseAlready,
     pending,
-    execute: checkIdentifiant,
+    execute: checkIdentifiant
   } = useFetchService(path, {
     method: METHODE_HTTP.GET,
     immediate: false,
     watch: false,
-    transform: (value: string) => value === 'true',
+    transform: (value: string) => value === 'true'
   })
 
   /** === METHODES === */
@@ -147,10 +147,7 @@
   <VTextField
     id="lastName-field"
     v-model="user.lastName"
-    :rules="[
-      VALIDATIONS_RULES.required,
-      VALIDATIONS_RULES.nameFormat,
-    ]"
+    :rules="[VALIDATIONS_RULES.required, VALIDATIONS_RULES.nameFormat]"
     label="Nom"
     test-id="lastName"
     @input="handleUserInput"
@@ -158,10 +155,7 @@
   <VTextField
     id="firstName-field"
     v-model="user.firstName"
-    :rules="[
-      VALIDATIONS_RULES.required,
-      VALIDATIONS_RULES.nameFormat,
-    ]"
+    :rules="[VALIDATIONS_RULES.required, VALIDATIONS_RULES.nameFormat]"
     label="Prénom"
     test-id="prenom"
     @input="handleUserInput"
@@ -174,7 +168,7 @@
     :rules="[
       VALIDATIONS_RULES.annudefFormat,
       rulesConfirmIdentifiant,
-      rulesUniqueIdentifiant,
+      rulesUniqueIdentifiant
     ]"
     label="Identifiant"
     test-id="identifiant"

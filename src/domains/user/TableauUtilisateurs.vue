@@ -3,9 +3,9 @@
   import type {UserInterface} from '~/types/user'
   import {MESSAGES} from '~/constants/messages.const'
   import {ROLES} from '~/constants/roles.const'
-  import {DEFAULT_USER_CONSTANTS} from '~/domains/users/utilisateurDefault.const'
-  import UserDialog from '~/domains/users/FormUtilisateur.vue'
-  import {useUserStore} from '~/domains/users/utilisateur.store'
+  import {DEFAULT_USER_CONSTANTS} from '~/domains/user/utilisateurDefault.const'
+  import UserDialog from '~/domains/user/FormUtilisateur.vue'
+  import {useUserStore} from '~/domains/user/utilisateur.store'
 
   const {user: connectedUser} = useAuthStore()
 

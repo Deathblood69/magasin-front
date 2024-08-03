@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {PATHS_API} from '~/constants/pathsAPI.const'
-import type {Client} from '~/domains/clients/client'
+import type {Client} from '~/domains/client/client'
 
 export const useClientStore = defineStore('client', () => {
   const selectedClient = ref<Client>()

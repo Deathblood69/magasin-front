@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {useProduitStore} from '~/domains/produits/produit.store'
+  import {useProduitStore} from '~/domains/produit/produit.store'
   import type {ItemGroup} from '~/types/itemGroup'
   import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'

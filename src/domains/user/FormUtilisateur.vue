@@ -3,8 +3,8 @@
   import {useSnackbarStore} from '~/stores/snackbar.store'
   import {PATHS_API} from '~/constants/pathsAPI.const'
   import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-  import FormUser from '~/domains/users/FormUser.vue'
-  import {DEFAULT_USER_CONSTANTS} from '~/domains/users/utilisateurDefault.const'
+  import FormUser from '~/domains/user/FormUser.vue'
+  import {DEFAULT_USER_CONSTANTS} from '~/domains/user/utilisateurDefault.const'
   import type {FetchServiceResponse} from '~/types/fetchServiceResponse'
   import {getLastProfilError} from '~/utils/getLastProfilError'
 
@@ -31,12 +31,12 @@
   /**  COMPUTED  **/
   const userToChange = computed({
     get: () => props.user,
-    set: (newUser) => emit('update:user', newUser),
+    set: (newUser) => emit('update:user', newUser)
   })
 
   const openComputed = computed({
     get: () => props.open,
-    set: (value) => emit('update:open', value),
+    set: (value) => emit('update:open', value)
   })
 
   const subTitle = computed(() => {
@@ -70,7 +70,7 @@
             | undefined
           if (responseData?.message.includes('User - username')) {
             openSnackbar('Identifiant utilisateur déjà utilisé.', {
-              color: 'error',
+              color: 'error'
             })
           } else {
             getLastProfilError(context, true)
@@ -78,10 +78,10 @@
         } else {
           // Affiche une notification d'erreur
           openSnackbar("Erreur lors de l'enregistrement de l'utilisateur", {
-            color: 'error',
+            color: 'error'
           })
         }
-      },
+      }
     }).finally(() => {
       afterClickLoading.value = false
     })

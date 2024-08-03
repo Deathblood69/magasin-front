@@ -2,9 +2,9 @@
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import type {Client} from './client'
   import {ROLES} from '~/constants/roles.const'
-  import {DEFAULT_CLIENT_CONSTANTS} from '~/domains/clients/clientDefault.const'
-  import DialogClient from '~/domains/clients/DialogClient.vue'
-  import {useClientStore} from '~/domains/clients/client.store'
+  import {DEFAULT_CLIENT_CONSTANTS} from '~/domains/client/clientDefault.const'
+  import DialogClient from '~/domains/client/DialogClient.vue'
+  import {useClientStore} from '~/domains/client/client.store'
 
   const clientStore = useClientStore()
   const {selectedClient, clients, clientsLength} = storeToRefs(clientStore)

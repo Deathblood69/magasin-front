@@ -1,4 +1,4 @@
-import type {Client} from '~/domains/clients/client'
+import type {Client} from '~/domains/client/client'
 
 /**
  * Valeur par défaut d'un utilisateur dans un formulaire

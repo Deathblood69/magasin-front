@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import TableauUtilisateurs from '~/domains/users/TableauUtilisateurs.vue'
-  import TableauProduit from '~/domains/produits/TableauProduit.vue'
-  import TableauClient from '~/domains/clients/TableauClient.vue'
+  import TableauUtilisateurs from '~/domains/user/TableauUtilisateurs.vue'
+  import TableauProduit from '~/domains/produit/TableauProduit.vue'
+  import TableauClient from '~/domains/client/TableauClient.vue'
 
   definePageMeta({
     layout: 'admin'

@@ -3,8 +3,8 @@
   import {useSnackbarStore} from '~/stores/snackbar.store'
   import {PATHS_API} from '~/constants/pathsAPI.const'
   import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-  import FormClient from '~/domains/clients/FormClient.vue'
-  import {DEFAULT_CLIENT_CONSTANTS} from '~/domains/clients/clientDefault.const'
+  import FormClient from '~/domains/client/FormClient.vue'
+  import {DEFAULT_CLIENT_CONSTANTS} from '~/domains/client/clientDefault.const'
   import type {FetchServiceResponse} from '~/types/fetchServiceResponse'
   import {getLastProfilError} from '~/utils/getLastProfilError'
 
