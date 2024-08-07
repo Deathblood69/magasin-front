@@ -1,14 +1,18 @@
 <script setup lang="ts">
-  import {useProduitStore} from '~/domains/produit/produit.store'
+  import {useProduitStore} from '~/domains/panier/produit.store'
   import type {ItemGroup} from '~/types/itemGroup'
   import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'
+  import type {Produit} from '~/domains/produit/produit'
+  import {ENTITIES} from '~/constants/entities'
+  import {useEntityStore} from '~/domains/entity/entity.store'
 
   const {openSnackbar} = useSnackbarStore()
 
-  const produitStore = useProduitStore()
-  const {findProduitInStock} = produitStore
-  const {produits} = storeToRefs(produitStore)
+  const {findProduitInStock} = useProduitStore()
+
+  const storeEntity = useEntityStore<Produit>(ENTITIES.produit)
+  const {data: produits} = storeToRefs(storeEntity)
 
   const panierStore = usePanierStore()
   const {addToPanier} = panierStore
@@ -26,6 +30,8 @@
       }) ?? []
     )
   })
+
+  /** LIFECYCLE **/
 
   function isProduitOutOfStock(item: ItemGroup) {
     const quantiteInStock = findProduitInStock(item.title)?.stock

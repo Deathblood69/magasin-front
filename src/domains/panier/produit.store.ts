@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import type {Produit} from './produit'
+import type {Produit} from '../produit/produit'
 import {PATHS_API} from '~/constants/pathsAPI.const'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
 
@@ -11,13 +11,13 @@ export const useProduitStore = defineStore('produit', () => {
 
   const produitsLength = ref<number>(0)
 
-  const {data: produits, refresh} = useFetchService<Produit[]>(
-    PATHS_API.produit
-  )
-
-  onMounted(async () => {
-    await refresh()
-  })
+  const produits = ref<Produit[]>([])
+  // const {data: produits, refresh} = useFetchService<Produit[]>(
+  //   PATHS_API.produit,
+  //   {
+  //     immediate: false
+  //   }
+  // )
 
   function findProduitInStock(nom: string) {
     return produits.value?.find((e) => e.nom === nom)
@@ -36,7 +36,7 @@ export const useProduitStore = defineStore('produit', () => {
           }
         }
       )
-      await refresh()
+      // await refresh()
     }
   }
 
@@ -44,7 +44,7 @@ export const useProduitStore = defineStore('produit', () => {
     selectedProduit,
     produits,
     produitsLength,
-    refresh,
+    refresh: () => {},
     findProduitInStock,
     retirerQuantiteProduit
   }

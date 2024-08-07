@@ -2,7 +2,7 @@
   import {usePanierStore} from '~/domains/panier/panier.store'
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import type {ItemGroup} from '~/types/itemGroup'
-  import {useProduitStore} from '~/domains/produit/produit.store'
+  import {useProduitStore} from '~/domains/panier/produit.store'
   import {useClientStore} from '~/domains/client/clients.store'
 
   const {openSnackbar} = useSnackbarStore()

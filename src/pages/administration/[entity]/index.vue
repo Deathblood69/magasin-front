@@ -15,10 +15,6 @@
     produits: TableauProduit,
     clients: TableauClient
   }
-
-  onMounted(() => {
-    console.log(entity)
-  })
 </script>
 
 <template>

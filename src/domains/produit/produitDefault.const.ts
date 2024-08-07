@@ -3,7 +3,7 @@ import type {Produit} from '~/domains/produit/produit'
 /**
  * Valeur par défaut d'un utilisateur dans un formulaire
  */
-export const DEFAULT_PRODUIT_CONSTANTS: Omit<Produit, 'id'> = {
+export const DEFAULT_PRODUIT: Omit<Produit, 'id'> = {
   nom: '',
   photo: '',
   stock: 0,

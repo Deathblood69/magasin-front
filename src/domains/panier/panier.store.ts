@@ -1,6 +1,6 @@
 import type {Produit} from '~/domains/produit/produit'
 import type {ItemPanier} from '~/domains/panier/panier'
-import {useProduitStore} from '~/domains/produit/produit.store'
+import {useProduitStore} from '~/domains/panier/produit.store'
 import {useClientStore} from '~/domains/client/clients.store'
 
 export const usePanierStore = defineStore('panier', () => {
