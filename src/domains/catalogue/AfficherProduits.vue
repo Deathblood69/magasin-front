@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import {useProduitStore} from '~/domains/panier/produit.store'
   import type {ItemGroup} from '~/types/itemGroup'
   import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'
@@ -9,7 +8,7 @@
 
   const {openSnackbar} = useSnackbarStore()
 
-  const {findProduitInStock} = useProduitStore()
+  const {findProduitInStock} = usePanierStore()
 
   const storeEntity = useEntityStore<Produit>(ENTITIES.produit)
   const {data: produits} = storeToRefs(storeEntity)

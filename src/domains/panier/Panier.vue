@@ -2,19 +2,19 @@
   import {usePanierStore} from '~/domains/panier/panier.store'
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import type {ItemGroup} from '~/types/itemGroup'
-  import {useProduitStore} from '~/domains/panier/produit.store'
-  import {useClientStore} from '~/domains/panier/clients.store'
 
   const {openSnackbar} = useSnackbarStore()
 
-  const {findProduitInStock} = useProduitStore()
-
   const panierStore = usePanierStore()
-  const {addToPanier, removeFromPanier, findProduitInPanier, validerPanier} =
-    panierStore
+  const {
+    addToPanier,
+    removeFromPanier,
+    findProduitInPanier,
+    validerPanier,
+    findProduitInStock
+  } = panierStore
 
-  const clientStore = useClientStore()
-  const {clients, selectedClient} = storeToRefs(clientStore)
+  const {clients, selectedClient} = storeToRefs(panierStore)
 
   const openPanier = ref<boolean>(false)
 
