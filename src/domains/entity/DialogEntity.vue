@@ -1,5 +1,5 @@
-<script lang="ts" setup generic="T extends EntityInterface">
-  import type {EntityInterface} from '~/types/entity'
+<script lang="ts" setup generic="T extends AbstractEntity">
+  import type {AbstractEntity} from '~/types/entity'
 
   /**  PROPS  **/
 

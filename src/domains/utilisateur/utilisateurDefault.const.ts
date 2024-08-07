@@ -1,9 +1,9 @@
-import type {UserInterface} from '~/types/user'
+import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
 
 /**
  * Valeur par défaut d'un utilisateur dans un formulaire
  */
-export const DEFAULT_USER_CONSTANTS = {
+export const DEFAULT_UTILISATEUR = {
   firstName: '',
   lastName: '',
   username: '',
@@ -13,4 +13,4 @@ export const DEFAULT_USER_CONSTANTS = {
   isLocked: false,
   dateLocked: 0,
   loginAttempts: 0
-} satisfies Omit<UserInterface, 'id'>
+} satisfies Omit<Utilisateur, 'id'>

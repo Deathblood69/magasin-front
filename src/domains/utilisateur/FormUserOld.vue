@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import type {UserInterface} from '~/types/user'
+  import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
   import {VALIDATIONS_RULES} from '~/constants/validationsRules.const'
   import {ROLES} from '~/constants/roles.const'
   import {PATHS_API} from '~/constants/pathsAPI.const'
@@ -8,14 +8,14 @@
   /** === PROPS === */
 
   interface Props {
-    modelValue: UserInterface | Omit<UserInterface, 'id'>
+    modelValue: Utilisateur | Omit<Utilisateur, 'id'>
   }
 
   const props = defineProps<Props>()
 
   /** === EMITS === */
   type Emits = {
-    'update:modelValue': [value: UserInterface | Omit<UserInterface, 'id'>]
+    'update:modelValue': [value: Utilisateur | Omit<Utilisateur, 'id'>]
   }
 
   const emit = defineEmits<Emits>()
@@ -32,13 +32,13 @@
   /** === COMPUTED === */
 
   const user = computed({
-    get: () => props.modelValue as UserInterface | Omit<UserInterface, 'id'>,
-    set: (value: UserInterface | Omit<UserInterface, 'id'>) =>
+    get: () => props.modelValue as Utilisateur | Omit<Utilisateur, 'id'>,
+    set: (value: Utilisateur | Omit<Utilisateur, 'id'>) =>
       emit('update:modelValue', value)
   })
 
   const path = computed(() => {
-    return `${PATHS_API.user}/identifiant/${user.value.username}`
+    return `${PATHS_API.utilisateur}/identifiant/${user.value.username}`
   })
 
   const computedIconPassword = computed(() =>

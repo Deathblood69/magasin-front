@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
-import type {Client} from './client'
+import type {Client} from '../client/client'
 import {PATHS_API} from '~/constants/pathsAPI.const'
-import {useSoldeStore} from '~/domains/solde/solde.store'
+import {useSoldeStore} from '~/domains/panier/solde.store'
 
 export const useClientStore = defineStore('client', () => {
   const {retirerQuantiteSolde} = useSoldeStore()

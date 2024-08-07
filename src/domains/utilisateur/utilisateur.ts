@@ -1,6 +1,6 @@
-import type {EntityInterface} from '~/types/entity'
+import type {AbstractEntity} from '~/types/entity'
 
-export interface UserInterface extends EntityInterface {
+export interface Utilisateur extends AbstractEntity {
   firstName: string
   lastName: string
   username: string

@@ -26,16 +26,16 @@
   >
     <template #dialog="{props}">
       <DialogEntity
-        v-if="props.selectedProduit"
+        v-if="props.selectedEntity"
         title="Produit"
         :default-entity="DEFAULT_PRODUIT"
-        v-model:entity="props.selectedProduit as Produit"
+        v-model:entity="props.selectedEntity as Produit"
         v-model:open="openDialog"
         @change="props.refreshData"
       >
         <FormProduit
           v-if="typeProduits"
-          v-model="props.selectedProduit as Produit"
+          v-model="props.selectedEntity as Produit"
           :type-produits="typeProduits?.map((e) => e.nom)"
         />
       </DialogEntity>

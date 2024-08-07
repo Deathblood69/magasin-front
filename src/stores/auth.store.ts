@@ -3,22 +3,22 @@ import {useFetchService} from '~/composables/useFetchService'
 import type {CredentialsInterface} from '~/types/credentials'
 import {PATHS_API} from '~/constants/pathsAPI.const'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-import type {UserInterface} from '~/types/user'
-import type {TokenInterface} from "~/types/token";
+import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
+import type {TokenInterface} from '~/types/token'
 
 export const useAuthStore = defineStore('auth', () => {
   const credentials = ref<CredentialsInterface>({
     username: '',
-    password: '',
+    password: ''
   })
 
   const user = computed(() => {
-      if(!userToken?.value) return null
-      const rs:Partial<UserInterface> = {
-          username: userToken.value?.username,
-          roles : userToken.value?.roles
-      }
-      return rs
+    if (!userToken?.value) return null
+    const rs: Partial<Utilisateur> = {
+      username: userToken.value?.username,
+      roles: userToken.value?.roles
+    }
+    return rs
   })
 
   const {
@@ -26,11 +26,11 @@ export const useAuthStore = defineStore('auth', () => {
     status,
     error,
     pending,
-    refresh,
+    refresh
   } = useFetchService<TokenInterface>(PATHS_API.login, {
     method: METHODE_HTTP.POST,
     body: credentials,
-    immediate: false,
+    immediate: false
   })
 
   /**
@@ -38,15 +38,14 @@ export const useAuthStore = defineStore('auth', () => {
    * @returns {Promise<boolean>} - Vrai si l'utilisateur est authentifié, faux sinon.
    */
   async function isAuthenticated() {
-
     // Si l'utilisateur est null alors on essaie de récupérer les données de l'utilisateur
-    if ( userToken?.value == null) {
+    if (userToken?.value == null) {
       const {data: newUser} = await useFetchService<TokenInterface>(
         PATHS_API.refreshAuth,
         {
           method: METHODE_HTTP.POST,
-          immediate: true,
-        },
+          immediate: true
+        }
       )
       userToken.value = newUser.value
     }
@@ -81,6 +80,6 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     credentials,
     isAuthenticated,
-    tryLogin,
+    tryLogin
   }
 })

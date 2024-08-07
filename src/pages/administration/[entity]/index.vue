@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import TableauUtilisateurs from '~/domains/user/TableauUtilisateurs.vue'
+  import TableauUtilisateurs from '~/domains/utilisateur/TableauUtilisateurs.vue'
   import TableauProduit from '~/domains/produit/TableauProduit.vue'
   import TableauClient from '~/domains/client/TableauClient.vue'
 

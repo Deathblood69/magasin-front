@@ -5,7 +5,7 @@ export enum PATHS_API {
   login = '/api/auth/login',
   refreshAuth = '/api/auth/login/refresh',
   logout = '/api/auth/logout',
-  user = '/api/user',
+  utilisateur = '/api/user',
   produit = '/api/produit',
   client = '/api/client',
   solde = '/api/solde'

@@ -1,6 +1,6 @@
-import type {EntityInterface} from '~/types/entity'
+import type {AbstractEntity} from '~/types/entity'
 
-export interface Solde extends EntityInterface {
+export interface Solde extends AbstractEntity {
   nom: string
   valeur: number
 }

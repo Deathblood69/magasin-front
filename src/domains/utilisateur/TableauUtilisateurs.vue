@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import TableauEntity from '~/domains/entity/TableauEntity.vue'
   import {ENTITIES} from '~/constants/entities'
-  import {DEFAULT_CLIENT} from '~/domains/client/clientDefault.const'
-  import type {Client} from '~/domains/client/client'
+  import {DEFAULT_UTILISATEUR} from '~/domains/utilisateur/utilisateurDefault.const'
+  import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
   import DialogEntity from '~/domains/entity/DialogEntity.vue'
-  import FormClient from '~/domains/client/FormClient.vue'
+  import FormUtilisateur from '~/domains/utilisateur/FormUtilisateur.vue'
+  import {ROLES} from '~/constants/roles.const'
 
   const openDialog = ref<boolean>(false)
 
@@ -15,20 +16,23 @@
 
 <template>
   <TableauEntity
-    :entity="ENTITIES.client"
-    :default-entity="DEFAULT_CLIENT"
+    :entity="ENTITIES.utilisateur"
+    :default-entity="DEFAULT_UTILISATEUR"
     @openForm="handleOpenForm"
   >
     <template #dialog="{props}">
       <DialogEntity
         v-if="props.selectedEntity"
-        title="Client"
-        :default-entity="DEFAULT_CLIENT"
-        v-model:entity="props.selectedEntity as Client"
+        title="Utilisateur"
+        :default-entity="DEFAULT_UTILISATEUR"
+        v-model:entity="props.selectedEntity as Utilisateur"
         v-model:open="openDialog"
         @change="props.refreshData"
       >
-        <FormClient v-model="props.selectedEntity as Client" />
+        <FormUtilisateur
+          v-model="props.selectedEntity as Utilisateur"
+          :type-utilisateurs="Object.values(ROLES)"
+        />
       </DialogEntity>
     </template>
   </TableauEntity>

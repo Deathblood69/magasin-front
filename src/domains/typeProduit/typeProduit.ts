@@ -1,5 +1,5 @@
-import type {EntityInterface} from '~/types/entity'
+import type {AbstractEntity} from '~/types/entity'
 
-export interface TypeProduit extends EntityInterface {
+export interface TypeProduit extends AbstractEntity {
   nom: string
 }

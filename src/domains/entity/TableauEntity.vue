@@ -1,9 +1,9 @@
-<script lang="ts" setup generic="T extends EntityInterface">
+<script lang="ts" setup generic="T extends AbstractEntity">
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import {ROLES} from '~/constants/roles.const'
   import {useEntityStore} from '~/domains/entity/entity.store'
   import {ENTITIES} from '~/constants/entities'
-  import type {EntityInterface} from '~/types/entity'
+  import type {AbstractEntity} from '~/types/entity'
   import {useSnackbarStore} from '~/stores/snackbar.store'
 
   interface Props {
@@ -23,7 +23,7 @@
   const {
     data: entities,
     length,
-    selected: selectedProduit
+    selected: selectedEntity
   } = storeToRefs(storeEntity)
   const {refreshData} = storeEntity
 
@@ -32,12 +32,12 @@
   const afterClickLoading = ref(false)
 
   function openDialogCreate() {
-    selectedProduit.value = JSON.parse(JSON.stringify(props.defaultEntity))
+    selectedEntity.value = JSON.parse(JSON.stringify(props.defaultEntity))
     emit('openForm', true)
   }
 
   function openDialogEdit(entity: T) {
-    selectedProduit.value = JSON.parse(JSON.stringify(entity))
+    selectedEntity.value = JSON.parse(JSON.stringify(entity))
     emit('openForm', true)
   }
 
@@ -145,7 +145,7 @@
   </VCard>
   <slot
     name="dialog"
-    :props="{refreshData, selectedProduit, closeDialog}"
+    :props="{refreshData, selectedEntity, closeDialog}"
     @valider="handleValider"
   ></slot>
 </template>
