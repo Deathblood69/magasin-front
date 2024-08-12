@@ -10,7 +10,7 @@
   const {logOut} = useAuthStore()
 
   function handleGoSetting() {
-    router.push(PAGES.utilisateurs.path)
+    router.push(PAGES.administration.path)
   }
 
   function handleLogOut() {
