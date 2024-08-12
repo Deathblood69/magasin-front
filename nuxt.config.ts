@@ -10,6 +10,9 @@ export default defineNuxtConfig({
   srcDir: 'src/',
 
   runtimeConfig: {
+    app: {
+      TITRE: "Le Virgini'z"
+    },
     public: {
       FETCH_LIST_INTERVALE: process.env.FETCH_LIST_INTERVALE || '5000'
     }
