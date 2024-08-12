@@ -16,7 +16,7 @@
 
   const disabledPanier = computed(() => {
     if (selectedClient.value && totalPrix.value) {
-      return selectedClient.value?.solde <= totalPrix.value
+      return selectedClient.value?.solde < totalPrix.value
     } else {
       return true
     }

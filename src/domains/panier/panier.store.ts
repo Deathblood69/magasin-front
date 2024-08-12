@@ -4,12 +4,18 @@ import {useEntityStore} from '~/domains/entity/entity.store'
 import {ENTITIES} from '~/constants/entities'
 import {useFetchService} from '~/composables/useFetchService'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
+import type {Client} from '~/domains/client/client'
 
 export const usePanierStore = defineStore('panier', () => {
   const {openSnackbar} = useSnackbarStore()
 
   const storeProduit = useEntityStore<Produit>(ENTITIES.produit)
   const {entities: produits} = storeToRefs(storeProduit)
+  const {refreshData: refreshProduit} = storeProduit
+
+  const storeClient = useEntityStore<Client>(ENTITIES.client)
+  const {selected: selectedClient} = storeToRefs(storeClient)
+  const {refreshData: refreshClient} = storeClient
 
   const open = ref<boolean>()
 
@@ -65,7 +71,8 @@ export const usePanierStore = defineStore('panier', () => {
   }
 
   async function validerPanier() {
-    await useFetchService(`/${ENTITIES.panier}/valider`, {
+    const path = `/${ENTITIES.panier}/${selectedClient.value?.id}/valider`
+    await useFetchService(path, {
       method: METHODE_HTTP.POST,
       body: items,
       onResponse() {
@@ -74,6 +81,7 @@ export const usePanierStore = defineStore('panier', () => {
           color: 'success',
           timeout: 2000
         })
+        items.value = []
       },
       onResponseError(): Promise<void> | void {
         openSnackbar('Erreur lors de la validation du panier', {
@@ -82,6 +90,8 @@ export const usePanierStore = defineStore('panier', () => {
         })
       }
     })
+    await refreshClient()
+    await refreshProduit()
   }
 
   return {

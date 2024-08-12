@@ -35,6 +35,10 @@
     return headers?.value.map((header) => header.key) || []
   })
 
+  onBeforeMount(() => {
+    refreshData()
+  })
+
   function openDialogCreate() {
     setSelected(props.defaultEntity)
     openDialog.value = true
