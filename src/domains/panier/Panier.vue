@@ -1,86 +1,54 @@
 <script setup lang="ts">
   import {usePanierStore} from '~/domains/panier/panier.store'
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
-  import type {ItemGroup} from '~/types/itemGroup'
+  import {useEntityStore} from '~/domains/entity/entity.store'
+  import {ENTITIES} from '~/constants/entities'
+  import type {ItemPanier} from '~/domains/panier/itemPanier'
+  import type {Client} from '~/domains/client/client'
 
-  const {openSnackbar} = useSnackbarStore()
+  const storeEntity = useEntityStore<Client>(ENTITIES.client)
+  const {entities: clients, selected: selectedClient} = storeToRefs(storeEntity)
 
-  const panierStore = usePanierStore()
-  const {
-    addToPanier,
-    removeFromPanier,
-    findProduitInPanier,
-    validerPanier,
-    findProduitInStock
-  } = panierStore
+  const storePanier = usePanierStore()
+  const {open, items, nombreItems, totalPrix} = storeToRefs(storePanier)
+  const {isProduitOutOfStock, addToPanier, subtractToPanier, validerPanier} =
+    storePanier
 
-  const {clients, selectedClient} = storeToRefs(panierStore)
-
-  const openPanier = ref<boolean>(false)
-
-  const {panier, nombreArticles, totalPrix} = storeToRefs(panierStore)
-  const items = computed(() => {
-    return (
-      panier.value?.map((produitPanier) => {
-        return {
-          title: produitPanier.produit.nom,
-          prix: `${produitPanier.produit.prix}€`,
-          quantite: produitPanier.quantite,
-          total: `${produitPanier.produit.prix * produitPanier.quantite}€`
-        }
-      }) ?? []
-    )
+  const disabledPanier = computed(() => {
+    if (selectedClient.value && totalPrix.value) {
+      return selectedClient.value?.solde <= totalPrix.value
+    } else {
+      return true
+    }
   })
 
-  function isProduitOutOfStock(item: ItemGroup) {
-    const quantiteInStock = findProduitInStock(item.title)?.stock
-    const quantiteInPanier = findProduitInPanier(item.title)?.quantite
-    if (quantiteInStock && quantiteInPanier) {
-      return quantiteInStock <= quantiteInPanier
-    } else {
-      return false
+  function handleClickAdd(item: ItemPanier) {
+    if (!isProduitOutOfStock(item.produit.nom)) {
+      addToPanier(item.produit)
     }
   }
 
-  function handleClickAdd(item: ItemGroup) {
-    const produit = findProduitInStock(item.title)
-    if (produit) {
-      addToPanier(produit)
-      openSnackbar('Produit modifié', {
-        color: 'success',
-        timeout: 2000
-      })
+  function handleClickRemove(item: ItemPanier) {
+    if (!isProduitOutOfStock(item.produit.nom)) {
+      subtractToPanier(item.produit)
     }
   }
 
-  function handleClickRemove(item: ItemGroup) {
-    const produit = findProduitInStock(item.title)
-    if (produit) {
-      removeFromPanier(produit)
-      openSnackbar('Produit modifié', {
-        color: 'success',
-        timeout: 2000
-      })
+  function itemProps(client: Client) {
+    return {
+      title: `${client.nom} ${client.prenom}`,
+      subtitle: `${client.solde}€`
     }
-  }
-
-  async function handleValiderPanier() {
-    await validerPanier()
-    openPanier.value = false
-    openSnackbar('Panier validé', {
-      color: 'success',
-      timeout: 2000
-    })
   }
 </script>
 
 <template>
   <AppMenu
-    v-model="openPanier"
-    :disabled="nombreArticles === 0"
+    v-model="open"
+    :disabled="nombreItems === 0"
   >
     <template #button>
-      <VBadge :content="nombreArticles">
+      <VBadge :content="nombreItems">
         <VIcon
           icon="mdi-cart-outline"
           size="x-large"
@@ -120,20 +88,19 @@
             Total Panier :
             {{ totalPrix }}€
           </VContainer>
-          <AppSelect
+          <v-select
             v-if="clients"
-            libelle="Client"
-            :items="clients"
             v-model="selectedClient"
-            item-title="identifiant"
-            item-value="id"
-            density="compact"
+            :item-props="itemProps"
+            :items="clients"
+            label="Client"
           />
           <VBtn
             text="Payer"
             variant="flat"
             color="primary"
-            @click="handleValiderPanier"
+            @click="validerPanier"
+            :disabled="disabledPanier"
           />
         </VListItem>
       </VList>

@@ -8,14 +8,11 @@
 
   const {openSnackbar} = useSnackbarStore()
 
-  const {findProduitInStock} = usePanierStore()
-
   const storeEntity = useEntityStore<Produit>(ENTITIES.produit)
   const {entities: produits} = storeToRefs(storeEntity)
 
-  const panierStore = usePanierStore()
-  const {addToPanier} = panierStore
-  const {panier} = storeToRefs(panierStore)
+  const storePanier = usePanierStore()
+  const {isProduitOutOfStock, findProduitInStock, addToPanier} = storePanier
 
   const items = computed(() => {
     return (
@@ -23,7 +20,7 @@
         return {
           title: e.nom,
           description: `${e.prix}€`,
-          image: e?.photo?.length > 0 ? e.photo : IMAGES.defautSoft,
+          image: IMAGES.defautSoft,
           disabled: e.stock === 0
         } as ItemGroup satisfies ItemGroup
       }) ?? []
@@ -31,18 +28,6 @@
   })
 
   /** LIFECYCLE **/
-
-  function isProduitOutOfStock(item: ItemGroup) {
-    const quantiteInStock = findProduitInStock(item.title)?.stock
-    const quantiteInPanier = panier.value?.find(
-      (produitPanier) => produitPanier.produit.nom === item.title
-    )?.quantite
-    if (quantiteInStock && quantiteInPanier) {
-      return quantiteInStock <= quantiteInPanier
-    } else {
-      return false
-    }
-  }
 
   function handleClickAdd(item: ItemGroup) {
     const produit = findProduitInStock(item.title)
@@ -65,7 +50,7 @@
       <VBtn
         icon="mdi-cart-variant"
         @click="handleClickAdd(item)"
-        :disabled="item.disabled || isProduitOutOfStock(item)"
+        :disabled="item.disabled || isProduitOutOfStock(item.title)"
       />
     </template>
   </AppItemGroup>

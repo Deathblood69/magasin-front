@@ -11,7 +11,7 @@ export const DATATABLE_HEADERS = {
     {title: 'Actions', key: 'actions', align: 'start', sortable: false}
   ] satisfies AppDataTableHeaders,
   panier: [
-    {title: 'Produit', key: 'title', align: 'start'},
+    {title: 'Produit', key: 'produit.nom', align: 'start'},
     {title: 'Quantité', key: 'quantite', align: 'start'},
     {title: 'Prix unitaire', key: 'prix', align: 'start'},
     {title: 'Prix total', key: 'total', align: 'start'},

@@ -1,133 +1,98 @@
+import type {ItemPanier} from '~/domains/panier/itemPanier'
 import type {Produit} from '~/domains/produit/produit'
-import type {ItemPanier} from '~/domains/panier/panier'
-import type {Client} from '~/domains/client/client'
-import {PATHS_API} from '~/constants/pathsAPI.const'
+import {useEntityStore} from '~/domains/entity/entity.store'
+import {ENTITIES} from '~/constants/entities'
+import {useFetchService} from '~/composables/useFetchService'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
-import type {Solde} from '~/domains/solde/solde'
 
 export const usePanierStore = defineStore('panier', () => {
-  const selectedClient = ref<string>()
+  const {openSnackbar} = useSnackbarStore()
 
-  const panier = ref<ItemPanier[]>([])
+  const storeProduit = useEntityStore<Produit>(ENTITIES.produit)
+  const {entities: produits} = storeToRefs(storeProduit)
+
+  const open = ref<boolean>()
+
+  const items = ref<ItemPanier[]>([])
+
+  const nombreItems = computed(() => {
+    return items.value.reduce((sum, item) => {
+      return sum + item.quantite
+    }, 0)
+  })
 
   const totalPrix = computed(() => {
-    return panier.value.reduce(
-      (acc, item) => acc + item.produit.prix * item.quantite,
-      0
-    )
+    return items.value.reduce((sum, item) => {
+      return sum + item.produit.prix * item.quantite
+    }, 0)
   })
 
-  const nombreArticles = computed(() => {
-    return panier.value.reduce((acc, item) => acc + item.quantite, 0)
-  })
-
-  const {data: clients} = useFetchService<Client[]>(PATHS_API.client)
-
-  const {data: produits} = useFetchService<Produit[]>(PATHS_API.produit, {
-    immediate: false
-  })
+  function isProduitOutOfStock(nom: string) {
+    const produit = findProduitInStock(nom)
+    const item = items.value.find((e) => e.produit.nom === nom)
+    if (produit && item) {
+      return produit?.stock < item.quantite
+    } else {
+      return false
+    }
+  }
 
   function findProduitInStock(nom: string) {
     return produits.value?.find((e) => e.nom === nom)
   }
 
-  async function retirerQuantiteProduit(nom: string, quantite: number) {
-    const produit = findProduitInStock(nom)
-
-    if (produit) {
-      await useFetchService<Produit[]>(
-        `${PATHS_API.produit}/${produit?.id}/id`,
-        {
-          method: METHODE_HTTP.PATCH,
-          body: {
-            stock: produit.stock - quantite
-          }
-        }
-      )
-      // await refresh()
-    }
-  }
-
-  function findIndexInPanier(produit: Produit) {
-    return panier.value.findIndex((item) => item.produit.nom === produit.nom)
-  }
-
   function addToPanier(produit: Produit) {
-    const index = findIndexInPanier(produit)
-    if (index !== -1) {
-      panier.value[index].quantite++
+    const item = items.value.find((e) => e.produit.nom === produit.nom)
+    if (item) {
+      item.quantite++
     } else {
-      panier.value.push({produit, quantite: 1})
+      items.value.push({produit, quantite: 1})
     }
   }
 
-  function removeFromPanier(produit: Produit) {
-    const index = findIndexInPanier(produit)
-    if (index !== -1) {
-      if (panier.value[index].quantite > 1) {
-        panier.value[index].quantite--
-      } else {
-        panier.value.splice(index, 1)
-      }
+  function subtractToPanier(produit: Produit) {
+    const item = items.value.find((e) => e.produit.nom === produit.nom)
+    if (item && item?.quantite > 1) {
+      item.quantite--
+      openSnackbar('Produit retiré du panier', {
+        color: 'success',
+        timeout: 2000
+      })
+    } else {
+      items.value = items.value.filter((e) => e.produit.nom !== produit.nom)
+      open.value = false
     }
-  }
-
-  function findProduitInPanier(nom: string) {
-    return panier.value?.find(
-      (produitPanier) => produitPanier.produit.nom === nom
-    )
   }
 
   async function validerPanier() {
-    await debiterClient(totalPrix.value)
-    for (const item of panier.value) {
-      await retirerQuantiteProduit(item.produit.nom, item.quantite)
-    }
-    panier.value = []
-  }
-
-  async function debiterClient(quantite: number) {
-    if (selectedClient.value && quantite) {
-      const soldeId = clients.value?.find(
-        (client) => client.identifiant === selectedClient.value
-      )?.solde
-      if (soldeId) {
-        await retirerQuantiteSolde(soldeId, quantite)
+    await useFetchService(`/${ENTITIES.panier}/valider`, {
+      method: METHODE_HTTP.POST,
+      body: items,
+      onResponse() {
+        open.value = false
+        openSnackbar('Panier validé', {
+          color: 'success',
+          timeout: 2000
+        })
+      },
+      onResponseError(): Promise<void> | void {
+        openSnackbar('Erreur lors de la validation du panier', {
+          color: 'error',
+          timeout: 2000
+        })
       }
-    }
-  }
-
-  async function retirerQuantiteSolde(soldeId: string, quantite: number) {
-    const {data: solde} = await useFetchService<Solde>(
-      `${PATHS_API.solde}/${soldeId}/id`,
-      {
-        method: METHODE_HTTP.GET
-      }
-    )
-
-    if (solde.value) {
-      await useFetchService<Solde[]>(
-        `${PATHS_API.solde}/${solde.value?.id}/id`,
-        {
-          method: METHODE_HTTP.PATCH,
-          body: {
-            valeur: solde.value.valeur - quantite
-          }
-        }
-      )
-    }
+    })
   }
 
   return {
-    panier,
+    open,
+    items,
+    nombreItems,
     totalPrix,
-    nombreArticles,
-    clients,
-    selectedClient,
+    isProduitOutOfStock,
+    findProduitInStock,
     addToPanier,
-    removeFromPanier,
-    findProduitInPanier,
-    validerPanier,
-    findProduitInStock
+    subtractToPanier,
+    validerPanier
   }
 })
