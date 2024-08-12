@@ -2,5 +2,6 @@ export enum ENTITIES {
   utilisateur = 'user',
   client = 'client',
   produit = 'produit',
-  typeProduit = 'typeProduit'
+  typeProduit = 'typeProduit',
+  solde = 'solde'
 }

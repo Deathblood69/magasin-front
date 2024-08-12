@@ -11,22 +11,14 @@
 
 <template>
   <VTextField
-    v-model="model.identifiant"
-    id="identifiant-field"
-    label="Identifiant"
-    test-id="identifiant"
-  />
-  <VTextField
     v-model="model.nom"
     id="nom-field"
     label="Nom"
-    test-id="nom"
   />
   <VTextField
     v-model="model.prenom"
     id="prenom-field"
     label="Prénom"
-    test-id="prenom"
   />
 
   <VTextField
@@ -34,7 +26,6 @@
     id="solde-field"
     label="Solde"
     suffix="€"
-    test-id="solde"
     :rules="[VALIDATIONS_RULES.onlyNumber]"
   />
 </template>

@@ -12,6 +12,11 @@
     :entity="ENTITIES.client"
     :default-entity="DEFAULT_CLIENT"
   >
+    <template #solde="{value}">
+      <VChip>
+        {{ `${value}€` }}
+      </VChip>
+    </template>
     <template #form="{props}">
       <FormClient v-model="props.selectedEntity as Client" />
     </template>
