@@ -56,7 +56,7 @@
 
   function handleValider() {
     sauvegarderEntity()
-    // closeDialog()
+    closeDialog()
   }
 
   function handleSupprimer() {
