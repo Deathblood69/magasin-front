@@ -5,6 +5,8 @@ import {PAGES} from '~/constants/pages.const'
  * Check if authenticated and authorized
  */
 export default defineNuxtRouteMiddleware(async (to, _from) => {
+  const {openSnackbar} = useSnackbarStore()
+
   // Check if authenticated
   const authStore = useAuthStore()
   const authentified = await authStore.isAuthenticated()
@@ -13,15 +15,22 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   }
 
   // Check if authorized
-  const pageRole = PAGES[to.name as keyof typeof PAGES]?.roles
-  if (pageRole?.length > 0 && to.path !== PAGES.connexion.path) {
-    const roles = authStore.user?.roles
+  const pageRole = Object.values(PAGES).find((e) => e.path === to.path)?.roles
+  const userRole = authStore.user?.roles
 
-    const requiredRole = pageRole?.some((role) =>
-      roles?.some((r) => r === role),
-    )
-    if (!requiredRole) {
-      return navigateTo(PAGES.connexion.path)
-    }
+  if (pageRole?.length === 0) {
+    return true
+  } else if (userRole?.length === 0) {
+    openSnackbar("Vous n'avez pas l'accès à l'application", {
+      color: 'error',
+      timeout: 5000
+    })
+    return navigateTo(PAGES.connexion.path)
+  } else if (!pageRole?.some((e) => userRole?.includes(e))) {
+    openSnackbar("Vous n'avez pas les droits pour accéder à cette page", {
+      color: 'error',
+      timeout: 5000
+    })
+    return navigateTo(PAGES.accueil.path)
   }
 })
