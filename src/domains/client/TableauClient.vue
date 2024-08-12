@@ -3,7 +3,6 @@
   import {ENTITIES} from '~/constants/entities'
   import {DEFAULT_CLIENT} from '~/domains/client/clientDefault.const'
   import type {Client} from '~/domains/client/client'
-  import DialogEntity from '~/domains/entity/DialogEntity.vue'
   import FormClient from '~/domains/client/FormClient.vue'
 
   const openDialog = ref<boolean>(false)
@@ -19,17 +18,8 @@
     :default-entity="DEFAULT_CLIENT"
     @openForm="handleOpenForm"
   >
-    <template #dialog="{props}">
-      <DialogEntity
-        v-if="props.selectedEntity"
-        title="Client"
-        :default-entity="DEFAULT_CLIENT"
-        v-model:entity="props.selectedEntity as Client"
-        v-model:open="openDialog"
-        @change="props.refreshData"
-      >
-        <FormClient v-model="props.selectedEntity as Client" />
-      </DialogEntity>
+    <template #form="{props}">
+      <FormClient v-model="props.selectedEntity as Client" />
     </template>
   </TableauEntity>
 </template>

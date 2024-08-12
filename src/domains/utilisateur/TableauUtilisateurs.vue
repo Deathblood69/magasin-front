@@ -3,7 +3,6 @@
   import {ENTITIES} from '~/constants/entities'
   import {DEFAULT_UTILISATEUR} from '~/domains/utilisateur/utilisateurDefault.const'
   import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
-  import DialogEntity from '~/domains/entity/DialogEntity.vue'
   import FormUtilisateur from '~/domains/utilisateur/FormUtilisateur.vue'
   import {ROLES} from '~/constants/roles.const'
 
@@ -20,20 +19,22 @@
     :default-entity="DEFAULT_UTILISATEUR"
     @openForm="handleOpenForm"
   >
-    <template #dialog="{props}">
-      <DialogEntity
-        v-if="props.selectedEntity"
-        title="Utilisateur"
-        :default-entity="DEFAULT_UTILISATEUR"
-        v-model:entity="props.selectedEntity as Utilisateur"
-        v-model:open="openDialog"
-        @change="props.refreshData"
+    <template #roles="{value}">
+      <VChip
+        v-for="role in value"
+        :key="role"
       >
-        <FormUtilisateur
-          v-model="props.selectedEntity as Utilisateur"
-          :type-utilisateurs="Object.values(ROLES)"
-        />
-      </DialogEntity>
+        {{ ROLES[role].title }}
+      </VChip>
+    </template>
+    <template #form="{props}">
+      <FormUtilisateur
+        v-model="props.selectedEntity as Utilisateur"
+        :type-utilisateurs="Object.values(ROLES)"
+      />
+    </template>
+    <template #messageDelete>
+      {{ 'Voulez-vous supprimer cet utilisateur ?' }}
     </template>
   </TableauEntity>
 </template>

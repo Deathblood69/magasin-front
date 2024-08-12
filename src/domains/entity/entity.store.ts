@@ -42,12 +42,22 @@ export const useEntityStore = <EntityType>(entity: string) =>
       }
     }
 
+    function handleValider() {
+      console.log('valider')
+    }
+
+    function handleSupprimer() {
+      console.log('supprimer')
+    }
+
     return {
       data,
       length,
       selected,
       refreshData,
       forceRefresh,
-      error
+      error,
+      handleValider,
+      handleSupprimer
     }
   })()

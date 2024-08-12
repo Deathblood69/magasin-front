@@ -3,7 +3,6 @@
   import {ENTITIES} from '~/constants/entities'
   import {DEFAULT_PRODUIT} from '~/domains/produit/produitDefault.const'
   import type {Produit} from '~/domains/produit/produit'
-  import DialogEntity from '~/domains/entity/DialogEntity.vue'
   import FormProduit from '~/domains/produit/FormProduit.vue'
   import {useEntityStore} from '~/domains/entity/entity.store'
   import type {TypeProduit} from '~/domains/typeProduit/typeProduit'
@@ -11,10 +10,8 @@
   const entityStore = useEntityStore<TypeProduit>(ENTITIES.typeProduit)
   const {data: typeProduits} = storeToRefs(entityStore)
 
-  const openDialog = ref<boolean>(false)
-
-  function handleOpenForm(value: boolean) {
-    openDialog.value = value
+  function handleFindTypeProduit(id: string) {
+    return typeProduits.value?.find((e) => e.id === id)?.nom
   }
 </script>
 
@@ -22,23 +19,21 @@
   <TableauEntity
     :entity="ENTITIES.produit"
     :default-entity="DEFAULT_PRODUIT"
-    @openForm="handleOpenForm"
   >
-    <template #dialog="{props}">
-      <DialogEntity
-        v-if="props.selectedEntity"
-        title="Produit"
-        :default-entity="DEFAULT_PRODUIT"
-        v-model:entity="props.selectedEntity as Produit"
-        v-model:open="openDialog"
-        @change="props.refreshData"
-      >
-        <FormProduit
-          v-if="typeProduits"
-          v-model="props.selectedEntity as Produit"
-          :type-produits="typeProduits?.map((e) => e.nom)"
-        />
-      </DialogEntity>
+    <template #typeProduit="{value}">
+      <VChip>
+        {{ handleFindTypeProduit(value) }}
+      </VChip>
+    </template>
+    <template #form="{props}">
+      <FormProduit
+        v-if="typeProduits"
+        v-model="props.selectedEntity as Produit"
+        :type-produits="typeProduits?.map((e) => e.nom)"
+      />
+    </template>
+    <template #messageDelete>
+      {{ 'Voulez-vous supprimer ce produit ?' }}
     </template>
   </TableauEntity>
 </template>
