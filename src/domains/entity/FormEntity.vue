@@ -13,10 +13,9 @@
 
   interface Props {
     title: string
-    defaultEntity: Omit<T, 'id'>
   }
 
-  const props = defineProps<Props>()
+  defineProps<Props>()
 
   /**  EMITS  **/
   type Emits = {
@@ -37,7 +36,6 @@
    * Réinitialise les valeurs de l'utilisateur et ferme le formulaire.
    */
   const handleCancel = () => {
-    entity.value = JSON.parse(JSON.stringify(props.defaultEntity))
     open.value = false
   }
 

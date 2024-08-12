@@ -11,7 +11,7 @@
   const {findProduitInStock} = usePanierStore()
 
   const storeEntity = useEntityStore<Produit>(ENTITIES.produit)
-  const {data: produits} = storeToRefs(storeEntity)
+  const {entities: produits} = storeToRefs(storeEntity)
 
   const panierStore = usePanierStore()
   const {addToPanier} = panierStore

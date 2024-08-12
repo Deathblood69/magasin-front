@@ -11,11 +11,11 @@ describe('utilisateur', () => {
         roles: ['ADMINISTRATEUR', 'OPERATEUR'],
         disabled: false,
         isLocked: false,
-        dateLocked: 0,
-        loginAttempts: 0,
+        dateLock: 0,
+        loginAttempts: 0
       })
       req.reply({
-        statusCode: 200,
+        statusCode: 200
       })
     })
 
@@ -24,24 +24,24 @@ describe('utilisateur', () => {
     const elements = [
       {
         libelle: 'Nom',
-        value: 'nom',
+        value: 'nom'
       },
       {
         libelle: 'Prénom',
-        value: 'prenom',
+        value: 'prenom'
       },
       {
         libelle: 'Identifiant',
-        value: 'i.dentifiant',
+        value: 'i.dentifiant'
       },
       {
         libelle: 'Mot de passe',
-        value: 'Azertyuiop123+',
+        value: 'Azertyuiop123+'
       },
       {
         libelle: 'Confirmer le mot de passe',
-        value: 'Azertyuiop123+',
-      },
+        value: 'Azertyuiop123+'
+      }
     ]
 
     elements.forEach((e) => {
@@ -89,12 +89,12 @@ describe('utilisateur', () => {
     const elements = [
       {
         libelle: 'Mot de passe',
-        value: 'Azertyuiop123+',
+        value: 'Azertyuiop123+'
       },
       {
         libelle: 'Confirmer le mot de passe',
-        value: 'Azertyuiop123+zdzd',
-      },
+        value: 'Azertyuiop123+zdzd'
+      }
     ]
 
     elements.forEach((e) => {
@@ -103,7 +103,7 @@ describe('utilisateur', () => {
 
     cy.get('.v-messages__message').should(
       'have.text',
-      'Les mots de passe ne correspondent pas.',
+      'Les mots de passe ne correspondent pas.'
     )
   })
 })

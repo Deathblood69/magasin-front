@@ -9,4 +9,4 @@ export const DEFAULT_PRODUIT: Omit<Produit, 'id'> = {
   stock: 0,
   prix: 0,
   typeProduit: ''
-} satisfies Omit<Produit, 'id'>
+}

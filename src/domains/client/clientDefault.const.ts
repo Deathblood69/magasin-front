@@ -8,4 +8,4 @@ export const DEFAULT_CLIENT: Omit<Client, 'id'> = {
   nom: '',
   prenom: '',
   solde: ''
-} satisfies Omit<Client, 'id'>
+}

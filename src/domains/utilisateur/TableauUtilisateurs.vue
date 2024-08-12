@@ -5,19 +5,13 @@
   import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
   import FormUtilisateur from '~/domains/utilisateur/FormUtilisateur.vue'
   import {ROLES} from '~/constants/roles.const'
-
-  const openDialog = ref<boolean>(false)
-
-  function handleOpenForm(value: boolean) {
-    openDialog.value = value
-  }
 </script>
 
 <template>
   <TableauEntity
+    titre="Utilisateurs"
     :entity="ENTITIES.utilisateur"
     :default-entity="DEFAULT_UTILISATEUR"
-    @openForm="handleOpenForm"
   >
     <template #roles="{value}">
       <VChip

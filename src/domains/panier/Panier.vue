@@ -122,8 +122,12 @@
           </VContainer>
           <AppSelect
             v-if="clients"
-            :items="clients.map((e) => e.identifiant)"
+            libelle="Client"
+            :items="clients"
             v-model="selectedClient"
+            item-title="identifiant"
+            item-value="id"
+            density="compact"
           />
           <VBtn
             text="Payer"

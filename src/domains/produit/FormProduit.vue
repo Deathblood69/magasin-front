@@ -1,11 +1,12 @@
 <script lang="ts" setup>
   import type {Produit} from './produit'
   import {VALIDATIONS_RULES} from '~/constants/validationsRules.const'
+  import type {TypeProduit} from '~/domains/typeProduit/typeProduit'
 
   /** === PROPS === */
 
   interface Props {
-    typeProduits: string[]
+    typeProduits: TypeProduit[]
   }
 
   defineProps<Props>()
@@ -17,34 +18,32 @@
 
 <template>
   <VTextField
-    v-model="model.nom"
     id="nom-field"
     label="Nom"
-    test-id="nom"
+    v-model="model.nom"
   />
   <VTextField
-    v-model="model.prix"
     id="prix-field"
     label="Prix"
+    v-model="model.prix"
     suffix="€"
-    test-id="prix"
     :rules="[VALIDATIONS_RULES.onlyNumber]"
   />
 
   <VTextField
-    v-model="model.stock"
     id="stock-field"
     label="Stock"
-    test-id="stock"
+    v-model="model.stock"
     type="number"
     :rules="[VALIDATIONS_RULES.onlyNumber]"
   />
   <AppSelect
-    id="typeProduit"
-    label="Type de produit"
+    id="typeProduit-field"
+    libelle="Type de produit"
     v-model="model.typeProduit"
     :items="typeProduits"
-    density="default"
+    item-title="nom"
+    item-value="id"
   />
 </template>
 

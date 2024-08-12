@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import AfficherMagasin from '~/domains/catalogue/AfficherProduits.vue'
+  import AfficherMagasin from '~/domains/catalogue/AfficherCatalogue.vue'
 </script>
 
 <template>

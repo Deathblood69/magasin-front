@@ -49,19 +49,19 @@
 
 <template>
   <VTextField
-    id="lastName-field"
-    v-model="model.lastName"
-    :rules="[VALIDATIONS_RULES.required, VALIDATIONS_RULES.nameFormat]"
-    label="Nom"
-    test-id="lastName"
-    @input="handleUserInput"
-  />
-  <VTextField
     id="firstName-field"
     v-model="model.firstName"
     :rules="[VALIDATIONS_RULES.required, VALIDATIONS_RULES.nameFormat]"
     label="Prénom"
     test-id="prenom"
+    @input="handleUserInput"
+  />
+  <VTextField
+    id="lastName-field"
+    v-model="model.lastName"
+    :rules="[VALIDATIONS_RULES.required, VALIDATIONS_RULES.nameFormat]"
+    label="Nom"
+    test-id="lastName"
     @input="handleUserInput"
   />
   <VTextField
@@ -105,11 +105,11 @@
   </VTextField>
   <AppSelect
     id="typeUtilisateur"
-    label="Type de utilisateur"
+    libelle="Type de utilisateur"
     v-model="model.roles"
     :items="typeUtilisateurs"
     :rules="[VALIDATIONS_RULES.notEmpty]"
-    density="default"
+    multiple
   />
 </template>
 

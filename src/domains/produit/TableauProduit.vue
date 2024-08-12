@@ -8,7 +8,7 @@
   import type {TypeProduit} from '~/domains/typeProduit/typeProduit'
 
   const entityStore = useEntityStore<TypeProduit>(ENTITIES.typeProduit)
-  const {data: typeProduits} = storeToRefs(entityStore)
+  const {entities: typeProduits} = storeToRefs(entityStore)
 
   function handleFindTypeProduit(id: string) {
     return typeProduits.value?.find((e) => e.id === id)?.nom
@@ -17,6 +17,7 @@
 
 <template>
   <TableauEntity
+    titre="Produits"
     :entity="ENTITIES.produit"
     :default-entity="DEFAULT_PRODUIT"
   >
@@ -29,7 +30,7 @@
       <FormProduit
         v-if="typeProduits"
         v-model="props.selectedEntity as Produit"
-        :type-produits="typeProduits?.map((e) => e.nom)"
+        :type-produits="typeProduits as TypeProduit[]"
       />
     </template>
     <template #messageDelete>

@@ -1,14 +1,13 @@
 <script lang="ts" setup generic="T extends AbstractEntity">
   import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
-  import {useEntityStore} from '~/domains/entity/entity.store'
   import {ENTITIES} from '~/constants/entities'
   import type {AbstractEntity} from '~/types/entity'
   import DeleteDialog from '~/domains/entity/DeleteDialog.vue'
-  import {DEFAULT_PRODUIT} from '~/domains/produit/produitDefault.const'
-  import type {Produit} from '~/domains/produit/produit'
-  import DialogEntity from '~/domains/entity/FormEntity.vue'
+  import FormEntity from '~/domains/entity/FormEntity.vue'
+  import {useEntityStore} from '~/domains/entity/entity.store'
 
   interface Props {
+    titre: string
     entity: ENTITIES
     defaultEntity: Omit<T, 'id'>
   }
@@ -17,11 +16,12 @@
 
   const storeEntity = useEntityStore<T>(props.entity)
   const {
-    data: entities,
+    entities: entities,
     length,
     selected: selectedEntity
   } = storeToRefs(storeEntity)
-  const {refreshData, handleValider, handleSupprimer} = storeEntity
+  const {refreshData, setSelected, sauvegarderEntity, supprimerEntity} =
+    storeEntity
 
   const openDialog = ref<boolean>(false)
 
@@ -36,22 +36,32 @@
   })
 
   function openDialogCreate() {
-    selectedEntity.value = JSON.parse(JSON.stringify(props.defaultEntity))
+    setSelected(props.defaultEntity)
     openDialog.value = true
   }
 
   function openDialogEdit(entity: T) {
-    selectedEntity.value = JSON.parse(JSON.stringify(entity))
+    setSelected(entity)
     openDialog.value = true
   }
 
   function openDialogDelete(entity: T) {
-    selectedEntity.value = JSON.parse(JSON.stringify(entity))
+    setSelected(entity)
     deleteDialog.value = true
   }
 
   function closeDialog() {
     openDialog.value = false
+  }
+
+  function handleValider() {
+    sauvegarderEntity()
+    // closeDialog()
+  }
+
+  function handleSupprimer() {
+    supprimerEntity()
+    closeDialog()
   }
 </script>
 
@@ -106,11 +116,10 @@
       </AppDataTable>
     </VCardText>
   </VCard>
-  <DialogEntity
+  <FormEntity
     v-if="selectedEntity"
-    title="Produit"
-    :default-entity="DEFAULT_PRODUIT"
-    v-model:entity="selectedEntity as Produit"
+    :title="titre"
+    v-model:entity="selectedEntity as T"
     v-model:open="openDialog"
     @change="refreshData"
     @valider="handleValider"
@@ -119,7 +128,7 @@
       name="form"
       :props="{refreshData, selectedEntity, closeDialog}"
     />
-  </DialogEntity>
+  </FormEntity>
   <DeleteDialog
     v-model="deleteDialog"
     @valider="handleSupprimer"

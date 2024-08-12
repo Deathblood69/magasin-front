@@ -3,25 +3,14 @@
 
   const open = defineModel<boolean>()
 
-  const isLoading = ref(false)
-
   type Emit = {
     valider: []
   }
 
   const emit = defineEmits<Emit>()
 
-  /**
-   * Ferme la boîte de dialogue de suppression.
-   */
-  function closeDeleteDialog() {
-    open.value = false
-  }
-
   function handleSupprimer() {
-    isLoading.value = true
     emit('valider')
-    closeDeleteDialog()
   }
 </script>
 

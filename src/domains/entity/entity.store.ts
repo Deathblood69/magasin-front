@@ -1,32 +1,38 @@
 import {useFetchService} from '~/composables/useFetchService'
+import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
+import type {AbstractEntity} from '~/types/entity'
 
-export const useEntityStore = <EntityType>(entity: string) =>
+export const useEntityStore = <T extends AbstractEntity>(entity: string) =>
   defineStore(`${entity}-generic-store`, () => {
     const config = useRuntimeConfig()
 
+    const selected = ref<T>()
+
     const lastFetchTime = ref(0)
 
-    const selected = ref<EntityType>()
-
-    const length = computed(() => {
-      return 0
-    })
+    const length = ref(0)
 
     /** Init Fetch refs for entity */
     const {
-      data,
-      refresh: forceRefresh,
-      error
-    } = useFetchService<EntityType[]>(`/${entity}`, {
+      data: entities,
+      refresh: refreshGetAll,
+      error: errorGetAll
+    } = useFetchService<T[]>(`/${entity}`, {
+      method: METHODE_HTTP.GET,
+      immediate: false,
       onResponse(context) {
         if (!context.response.ok) lastFetchTime.value = 0
-      },
-      immediate: false
+      }
     })
 
     onBeforeMount(async () => {
       await refreshData()
+      length.value = entities.value?.length ?? 0
     })
+
+    function setSelected(entity: T | Omit<T, 'id'>) {
+      selected.value = JSON.parse(JSON.stringify(entity))
+    }
 
     /**
      * Rafraîchit les données si le temps écoulé depuis la
@@ -37,27 +43,45 @@ export const useEntityStore = <EntityType>(entity: string) =>
         Date.now() - lastFetchTime.value >
         parseInt(config.public.FETCH_LIST_INTERVALE)
       ) {
-        await forceRefresh() // Force le rafraîchissement
+        await refreshGetAll() // Force le rafraîchissement
         lastFetchTime.value = Date.now()
       }
     }
 
-    function handleValider() {
-      console.log('valider')
+    async function sauvegarderEntity() {
+      let path = `/${entity}`
+      let mode = METHODE_HTTP.POST
+      if (selected.value?.id) {
+        path += `/${selected.value?.id}/id`
+        mode = METHODE_HTTP.PATCH
+      }
+      if (selected.value) {
+        await useFetchService<T>(path, {
+          method: mode,
+          body: selected.value
+        })
+        await refreshData()
+      }
     }
 
-    function handleSupprimer() {
-      console.log('supprimer')
+    async function supprimerEntity() {
+      if (selected.value) {
+        await useFetchService(`/${entity}/${selected.value?.id}/id`, {
+          method: METHODE_HTTP.DELETE
+        })
+        await refreshData()
+      }
     }
 
     return {
-      data,
+      entities,
       length,
-      selected,
       refreshData,
-      forceRefresh,
-      error,
-      handleValider,
-      handleSupprimer
+      selected,
+      setSelected,
+      forceRefresh: refreshGetAll,
+      error: errorGetAll,
+      sauvegarderEntity,
+      supprimerEntity
     }
   })()

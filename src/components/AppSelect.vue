@@ -1,20 +1,20 @@
 <script setup lang="ts">
   interface Props {
+    libelle: string
     items: any[]
   }
 
   defineProps<Props>()
 
-  const item = defineModel<any>('item')
+  const item = defineModel<any>()
 </script>
 
 <template>
-  <v-select
-    density="compact"
-    label="Select"
+  <VSelect
+    :label="libelle"
     :items="items"
     v-model="item"
-  ></v-select>
+  />
 </template>
 
 <style scoped></style>
