@@ -1,8 +1,6 @@
 <script lang="ts" setup>
   import {capitalize} from 'vue'
-  import {useAuthStore} from '~/stores/auth.store'
   import type {LienMenuInterface} from '~/types/lienMenu'
-  import {PAGES} from '~/constants/pages.const'
 
   /** === PROPS === */
 
@@ -29,7 +27,7 @@
     get: () => props.modelValue,
     set: (newValue) => {
       emit('update:modelValue', newValue)
-    },
+    }
   })
 
   /** === METHODES === */
@@ -44,7 +42,7 @@
     :temporary="temporary"
   >
     <VImg
-      src="~/assets/images/logo.svg"
+      src="~/assets/images/logo.png"
       max-height="150px"
     />
     <VList class="spacer pt-10">
