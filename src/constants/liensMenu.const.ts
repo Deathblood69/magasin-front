@@ -7,27 +7,27 @@ import {PAGES} from '~/constants/pages.const'
 export const LIENS_MENU: LienMenuInterface[] = [
   {
     to: PAGES.administration,
-    title: 'tableauDeBord',
+    title: 'Tableau de Bord',
     icon: 'mdi-view-dashboard'
   },
   {
     to: PAGES.clients,
-    title: 'clients',
+    title: 'Clients',
     icon: 'mdi-account-cash'
   },
   {
     to: PAGES.produits,
-    title: 'produits',
+    title: 'Produits',
     icon: 'mdi-store'
   },
   {
     to: PAGES.typeProduits,
-    title: 'typeProduit',
+    title: 'Type de produit',
     icon: 'mdi-store-cog'
   },
   {
     to: PAGES.utilisateurs,
-    title: 'utilisateurs',
+    title: 'Utilisateurs',
     icon: 'mdi-account-multiple'
   }
 ]

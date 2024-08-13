@@ -1,6 +1,4 @@
-import type {RoleInterface} from '~/types/role'
-
-export const ROLES: Record<string, RoleInterface> = {
+export const ROLES = {
   ADMINISTRATEUR: {
     title: 'Administrateur',
     description: 'Administrateur du système',

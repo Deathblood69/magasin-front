@@ -1,9 +1,13 @@
 <script setup lang="ts">
+  import TableauDeBord from '~/domains/tableauDeBord/TableauDeBord.vue'
+
   definePageMeta({
-    layout: 'admin',
+    layout: 'admin'
   })
 </script>
 
-<template></template>
+<template>
+  <TableauDeBord />
+</template>
 
 <style scoped></style>

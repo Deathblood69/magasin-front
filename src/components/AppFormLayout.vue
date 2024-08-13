@@ -2,7 +2,7 @@
   /** === PROPS === */
 
   interface Props {
-    title: string
+    title?: string
     subtitle?: string
     loading?: boolean
     closable?: boolean
@@ -19,9 +19,10 @@
 
   withDefaults(defineProps<Props>(), {
     loading: false,
+    title: '',
     subtitle: '',
     closable: true,
-    width: undefined,
+    width: undefined
   })
 
   /** === REFS === */

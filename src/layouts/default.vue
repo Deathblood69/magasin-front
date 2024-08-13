@@ -1,13 +1,18 @@
 <script setup lang="ts">
   import Panier from '~/domains/panier/Panier.vue'
   import {PAGES} from '~/constants/pages.const'
+  import {ROLES} from '~/constants/roles.const'
+  import {IMAGES} from 'assets/images/images'
 
   /** ==== CONFIG ===  **/
+
+  const {app: appConfig} = useRuntimeConfig()
+
   const router = useRouter()
 
   const {snackbar, icon} = storeToRefs(useSnackbarStore())
 
-  const {logOut} = useAuthStore()
+  const {user, logOut} = useAuthStore()
 
   function handleGoSetting() {
     router.push(PAGES.administration)
@@ -21,10 +26,17 @@
 
 <template>
   <VLayout class="rounded rounded-md">
-    <AppAppBar>
+    <AppBar :titre="appConfig.TITRE">
+      <template #logo>
+        <VImg
+          :src="IMAGES.logo"
+          max-height="50px"
+        />
+      </template>
       <template #actions>
         <Panier />
         <VBtn
+          v-if="user?.roles?.includes(ROLES.ADMINISTRATEUR.value)"
           :disabled="false"
           @click="handleGoSetting"
         >
@@ -43,7 +55,7 @@
           />
         </VBtn>
       </template>
-    </AppAppBar>
+    </AppBar>
     <VMain class="d-flex justify-center align-center">
       <slot />
     </VMain>

@@ -33,19 +33,21 @@
 
 <template>
   <div class="d-flex flex-column w-100 h-100">
-    <VImg
-      :src="IMAGES.logo"
-      max-height="40vh"
-    />
     <div class="d-flex w-100 justify-center">
       <AppFormLayout
         :closable="false"
         :loading="afterClickLoading"
-        :title="appConfig.TITRE"
         width="33%"
         min-width="300"
         @validate="validateConnexion"
       >
+        <VImg
+          :src="IMAGES.logo"
+          max-height="40vh"
+        />
+        <VCardTitle class="d-flex w-100 justify-center">
+          {{ appConfig.TITRE }}
+        </VCardTitle>
         <FormCredentials v-model="credentials" />
         <template #actions="{validate, loading}">
           <AuthLoginBtn

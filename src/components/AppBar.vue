@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import {IMAGES} from 'assets/images/images'
+  interface Props {
+    titre: string
+  }
 
-  const {app: appConfig} = useRuntimeConfig()
+  defineProps<Props>()
 </script>
 
 <template>
@@ -9,11 +11,8 @@
     :elevation="2"
     color="primary"
   >
-    <VImg
-      :src="IMAGES.logo"
-      max-width="50px"
-    />
-    <VAppBarTitle> {{ appConfig.TITRE }}</VAppBarTitle>
+    <slot name="logo" />
+    <VAppBarTitle> {{ titre }}</VAppBarTitle>
     <template v-slot:append>
       <slot name="actions" />
     </template>

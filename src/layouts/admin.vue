@@ -2,18 +2,29 @@
   import {useDisplay} from 'vuetify'
   import {LIENS_MENU} from '~/constants/liensMenu.const'
   import {PAGES} from '~/constants/pages.const'
+  import {IMAGES} from 'assets/images/images'
 
   /**  CONFIG  **/
+
+  const userStore = useAuthStore()
+  const {user} = storeToRefs(userStore)
 
   const {snackbar, icon} = storeToRefs(useSnackbarStore())
 
   /**  REFS  **/
   const {mobile} = useDisplay()
-  const drawerActivated = ref(!mobile.value)
+  const drawer = ref(!mobile.value)
+  const expandBtnValue = ref(false)
 
   /**  COMPUTED  **/
 
-  const drawerActivatedCustom = computed(() => mobile.value)
+  const rail = computed(() => {
+    if (!mobile.value) {
+      return expandBtnValue.value
+    } else {
+      return true
+    }
+  })
 
   async function handleGoAccueil() {
     await useRouter().push(PAGES.accueil)
@@ -24,27 +35,32 @@
   <VApp>
     <VLayout class="rounded rounded-md">
       <AppNavigationDrawer
-        v-model="drawerActivated"
-        :temporary="drawerActivatedCustom"
-        :liens="LIENS_MENU"
+        v-model="drawer"
+        :rail="rail"
+        :items="LIENS_MENU"
       >
+        <template #prepend>
+          <VListItem @click="expandBtnValue = !expandBtnValue">
+            <VImg
+              :src="IMAGES.logo"
+              max-height="150px"
+            />
+          </VListItem>
+        </template>
         <template #append>
+          <VDivider />
           <VBtn
-            :block="true"
-            class="mb-3"
+            :text="expandBtnValue ? '' : 'Accueil'"
             prepend-icon="mdi-home"
-            text="Accueil"
+            :icon="expandBtnValue || mobile ? 'mdi-home' : false"
+            :rounded="0"
+            :block="true"
+            size="large"
             variant="text"
             @click="handleGoAccueil"
           />
         </template>
       </AppNavigationDrawer>
-
-      <VAppBarNavIcon
-        v-if="drawerActivatedCustom"
-        @click="drawerActivated = !drawerActivated"
-      />
-
       <VMain
         class="pt-6 pb-6 d-flex justify-center"
         style="min-height: 300px"
