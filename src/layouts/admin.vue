@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import {useDisplay} from 'vuetify'
-  import {OPTIONS_MENU} from '~/constants/optionsMenu'
-  import {useAuthStore} from '~/stores/auth.store'
+  import {LIENS_MENU} from '~/constants/liensMenu.const'
   import {PAGES} from '~/constants/pages.const'
 
   /**  CONFIG  **/
@@ -13,14 +12,11 @@
   const drawerActivated = ref(!mobile.value)
 
   /**  COMPUTED  **/
-  const liens = computed(() => {
-    return Object.values(OPTIONS_MENU)
-  })
 
   const drawerActivatedCustom = computed(() => mobile.value)
 
   async function handleGoAccueil() {
-    await useRouter().push(PAGES.accueil.path)
+    await useRouter().push(PAGES.accueil)
   }
 </script>
 
@@ -30,7 +26,7 @@
       <AppNavigationDrawer
         v-model="drawerActivated"
         :temporary="drawerActivatedCustom"
-        :liens="liens"
+        :liens="LIENS_MENU"
       >
         <template #append>
           <VBtn

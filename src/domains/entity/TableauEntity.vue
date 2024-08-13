@@ -1,15 +1,16 @@
 <script lang="ts" setup generic="T extends AbstractEntity">
-  import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
-  import {ENTITIES} from '~/constants/entities'
+  import {ENTITIES} from '~/domains/entities'
   import type {AbstractEntity} from '~/types/entity'
   import DeleteDialog from '~/domains/entity/DeleteDialog.vue'
   import FormEntity from '~/domains/entity/FormEntity.vue'
   import {useEntityStore} from '~/domains/entity/entity.store'
+  import type {AppDataTableHeaders} from '~/types/headers'
 
   interface Props {
     titre: string
     entity: ENTITIES
     defaultEntity: Omit<T, 'id'>
+    headers: AppDataTableHeaders
   }
 
   const props = defineProps<Props>()
@@ -27,12 +28,8 @@
 
   const deleteDialog = ref<boolean>(false)
 
-  const headers = computed(() => {
-    return DATATABLE_HEADERS[props.entity as keyof typeof DATATABLE_HEADERS]
-  })
-
   const keys = computed(() => {
-    return headers?.value.map((header) => header.key) || []
+    return props.headers?.map((header) => header.key) || []
   })
 
   onBeforeMount(() => {

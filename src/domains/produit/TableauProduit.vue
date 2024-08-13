@@ -1,11 +1,12 @@
 <script lang="ts" setup>
   import TableauEntity from '~/domains/entity/TableauEntity.vue'
-  import {ENTITIES} from '~/constants/entities'
+  import {ENTITIES} from '~/domains/entities'
   import {DEFAULT_PRODUIT} from '~/domains/produit/produitDefault.const'
   import type {Produit} from '~/domains/produit/produit'
   import FormProduit from '~/domains/produit/FormProduit.vue'
   import {useEntityStore} from '~/domains/entity/entity.store'
   import type {TypeProduit} from '~/domains/typeProduit/typeProduit'
+  import {produitHeaders} from '~/domains/produit/produitHeaders'
 
   const entityStore = useEntityStore<TypeProduit>(ENTITIES.typeProduit)
   const {entities: typeProduits} = storeToRefs(entityStore)
@@ -20,6 +21,7 @@
     titre="Produits"
     :entity="ENTITIES.produit"
     :default-entity="DEFAULT_PRODUIT"
+    :headers="produitHeaders"
   >
     <template #typeProduit="{value}">
       <VChip>

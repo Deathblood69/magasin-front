@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import TableauEntity from '~/domains/entity/TableauEntity.vue'
-  import {ENTITIES} from '~/constants/entities'
+  import {ENTITIES} from '~/domains/entities'
   import {DEFAULT_UTILISATEUR} from '~/domains/utilisateur/utilisateurDefault.const'
   import type {Utilisateur} from '~/domains/utilisateur/utilisateur'
   import FormUtilisateur from '~/domains/utilisateur/FormUtilisateur.vue'
   import {ROLES} from '~/constants/roles.const'
+  import {utilisateurHeaders} from '~/domains/utilisateur/utilisateurHeaders'
 </script>
 
 <template>
@@ -12,6 +13,7 @@
     titre="Utilisateurs"
     :entity="ENTITIES.utilisateur"
     :default-entity="DEFAULT_UTILISATEUR"
+    :headers="utilisateurHeaders"
   >
     <template #roles="{value}">
       <VChip

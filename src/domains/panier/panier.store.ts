@@ -1,7 +1,7 @@
 import type {ItemPanier} from '~/domains/panier/itemPanier'
 import type {Produit} from '~/domains/produit/produit'
 import {useEntityStore} from '~/domains/entity/entity.store'
-import {ENTITIES} from '~/constants/entities'
+import {ENTITIES} from '~/domains/entities'
 import {useFetchService} from '~/composables/useFetchService'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
 import type {Client} from '~/domains/client/client'

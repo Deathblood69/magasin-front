@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import {usePanierStore} from '~/domains/panier/panier.store'
-  import {DATATABLE_HEADERS} from '~/constants/dataTableHeaders'
   import {useEntityStore} from '~/domains/entity/entity.store'
-  import {ENTITIES} from '~/constants/entities'
+  import {ENTITIES} from '~/domains/entities'
   import type {ItemPanier} from '~/domains/panier/itemPanier'
   import type {Client} from '~/domains/client/client'
+  import {panierHeaders} from '~/domains/panier/panierHeaders'
 
   const storeEntity = useEntityStore<Client>(ENTITIES.client)
   const {entities: clients, selected: selectedClient} = storeToRefs(storeEntity)
@@ -59,7 +59,7 @@
       <VList>
         <VListItem>
           <AppDataTableVirtual
-            :headers="DATATABLE_HEADERS.panier"
+            :headers="panierHeaders"
             :items="items"
           >
             <template #actions="{item}">

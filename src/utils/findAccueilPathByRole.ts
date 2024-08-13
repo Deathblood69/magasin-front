@@ -8,16 +8,13 @@ import {PAGES} from '~/constants/pages.const'
  * @return {string} The path based on the roles.
  */
 export function findAccueilPathByRole(roles: string[] | null = null) {
-  let page = PAGES.connexion.path
+  let page = PAGES.connexion
   if (roles === null) {
-    page = PAGES.connexion.path
+    page = PAGES.connexion
   } else if (roles.includes(ROLES.ADMINISTRATEUR.value)) {
-    page = PAGES.utilisateurs.path
-  } else if (roles.includes(ROLES.ENROLEUR.value)) {
-    page = PAGES.residents.path
-  } else if (roles.includes(ROLES.OPERATEUR.value)) {
-    page = PAGES.videoSurveillance.path
+    page = PAGES.administration
+  } else if (roles.includes(ROLES.UTILISATEUR.value)) {
+    page = PAGES.accueil
   }
-
   return page
 }

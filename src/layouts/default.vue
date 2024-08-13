@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import {PAGES} from '~/constants/pages.const'
   import Panier from '~/domains/panier/Panier.vue'
+  import {PAGES} from '~/constants/pages.const'
 
   /** ==== CONFIG ===  **/
   const router = useRouter()
@@ -10,12 +10,12 @@
   const {logOut} = useAuthStore()
 
   function handleGoSetting() {
-    router.push(PAGES.administration.path)
+    router.push(PAGES.administration)
   }
 
   function handleLogOut() {
     logOut()
-    router.push(PAGES.connexion.path)
+    router.push(PAGES.connexion)
   }
 </script>
 

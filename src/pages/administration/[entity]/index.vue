@@ -2,6 +2,7 @@
   import TableauUtilisateurs from '~/domains/utilisateur/TableauUtilisateurs.vue'
   import TableauProduit from '~/domains/produit/TableauProduit.vue'
   import TableauClient from '~/domains/client/TableauClient.vue'
+  import TableauTypeProduit from '~/domains/typeProduit/TableauTypeProduit.vue'
 
   definePageMeta({
     layout: 'admin'
@@ -11,9 +12,10 @@
   const {entity} = params
 
   const pages = {
-    utilisateurs: TableauUtilisateurs,
+    clients: TableauClient,
     produits: TableauProduit,
-    clients: TableauClient
+    'type-produit': TableauTypeProduit,
+    utilisateurs: TableauUtilisateurs
   }
 </script>
 

@@ -3,7 +3,7 @@
   import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'
   import type {Produit} from '~/domains/produit/produit'
-  import {ENTITIES} from '~/constants/entities'
+  import {ENTITIES} from '~/domains/entities'
   import {useEntityStore} from '~/domains/entity/entity.store'
 
   const {openSnackbar} = useSnackbarStore()
