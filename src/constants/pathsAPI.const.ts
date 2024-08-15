@@ -2,11 +2,11 @@
  * Liste des chemins vers l'api
  */
 export enum PATHS_API {
-  login = '/api/auth/login',
-  refreshAuth = '/api/auth/login/refresh',
-  logout = '/api/auth/logout',
-  utilisateur = '/api/user',
-  produit = '/api/produit',
-  client = '/api/client',
-  solde = '/api/solde'
+  login = '/auth/login',
+  refreshAuth = '/auth/login/refresh',
+  logout = '/auth/logout',
+  utilisateur = '/user',
+  produit = '/produit',
+  client = '/client',
+  solde = '/solde'
 }

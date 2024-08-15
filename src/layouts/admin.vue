@@ -6,8 +6,9 @@
 
   /**  CONFIG  **/
 
-  const userStore = useAuthStore()
-  const {user} = storeToRefs(userStore)
+  const {app} = useRuntimeConfig()
+
+  const router = useRouter()
 
   const {snackbar, icon} = storeToRefs(useSnackbarStore())
 
@@ -27,7 +28,7 @@
   })
 
   async function handleGoAccueil() {
-    await useRouter().push(PAGES.accueil)
+    await router.push(PAGES.accueil)
   }
 </script>
 
@@ -40,12 +41,18 @@
         :items="LIENS_MENU"
       >
         <template #prepend>
-          <VListItem @click="expandBtnValue = !expandBtnValue">
+          <VContainer @click="expandBtnValue = !expandBtnValue">
             <VImg
               :src="IMAGES.logo"
               max-height="150px"
             />
-          </VListItem>
+            <div
+              v-if="!expandBtnValue"
+              align="center"
+            >
+              {{ app.TITRE }}
+            </div>
+          </VContainer>
         </template>
         <template #append>
           <VDivider />

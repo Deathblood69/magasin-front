@@ -9,8 +9,13 @@ export function useFetchService<R>(
   url: string | (() => string),
   options: UseFetchOptions<R> = {}
 ) {
+  const {public: config} = useRuntimeConfig()
+
+  console.log(url, config.API_BASE)
+
   return useFetch(url, {
     ...options,
+    baseURL: config.API_BASE,
     $fetch: useNuxtApp().$customFetch
   })
 }

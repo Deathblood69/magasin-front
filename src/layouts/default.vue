@@ -6,7 +6,7 @@
 
   /** ==== CONFIG ===  **/
 
-  const {app: appConfig} = useRuntimeConfig()
+  const {app} = useRuntimeConfig()
 
   const router = useRouter()
 
@@ -26,13 +26,10 @@
 
 <template>
   <VLayout class="rounded rounded-md">
-    <AppBar :titre="appConfig.TITRE">
-      <template #logo>
-        <VImg
-          :src="IMAGES.logo"
-          max-height="50px"
-        />
-      </template>
+    <AppBar
+      :titre="app.TITRE"
+      :logo="IMAGES.logo"
+    >
       <template #actions>
         <Panier />
         <VBtn

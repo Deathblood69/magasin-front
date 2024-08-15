@@ -8,7 +8,7 @@
 
   /** === CONFIG === */
 
-  const {app: appConfig} = useRuntimeConfig()
+  const {app} = useRuntimeConfig()
 
   const authStore = useAuthStore()
 
@@ -46,7 +46,7 @@
           max-height="40vh"
         />
         <VCardTitle class="d-flex w-100 justify-center">
-          {{ appConfig.TITRE }}
+          {{ app.TITRE }}
         </VCardTitle>
         <FormCredentials v-model="credentials" />
         <template #actions="{validate, loading}">

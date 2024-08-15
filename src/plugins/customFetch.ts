@@ -1,7 +1,5 @@
 export default defineNuxtPlugin(() => {
-  const $customFetch = $fetch.create({
-    baseURL: '/api'
-  })
+  const $customFetch = $fetch.create({})
   // Expose to useNuxtApp().$customFetch
   return {
     provide: {

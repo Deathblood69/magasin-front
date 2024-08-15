@@ -1,32 +1,33 @@
 import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+const APP_CONFIG = {
+  titre: "Le Virgini'z",
+  port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
+  apiUrl: 'http://127.0.0.1:8080/',
+  apiBase: '/api',
+  fetchInterval: process.env.FETCH_LIST_INTERVALE || '5000'
+}
+
 export default defineNuxtConfig({
-  devServer: {
-    port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
-  },
-
-  // @ts-ignore
-  srcDir: 'src/',
-
-  runtimeConfig: {
-    app: {
-      TITRE: "Le Virgini'z"
-    },
-    public: {
-      FETCH_LIST_INTERVALE: process.env.FETCH_LIST_INTERVALE || '5000'
+  app: {
+    head: {
+      title: APP_CONFIG.titre
     }
   },
 
-  ssr: false,
-  typescript: {typeCheck: true, strict: true},
-  css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
-  devtools: {enabled: true},
-
+  // @ts-ignore
   build: {
     transpile: ['vuetify']
   },
 
+  compatibilityDate: '2024-07-25',
+
+  css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
+  devServer: {
+    port: APP_CONFIG.port
+  },
+  devtools: {enabled: true},
   modules: [
     '@pinia/nuxt',
     '@nuxt/test-utils/module',
@@ -39,6 +40,23 @@ export default defineNuxtConfig({
     //...
   ],
 
+  runtimeConfig: {
+    app: {
+      TITRE: APP_CONFIG.titre
+    },
+    public: {
+      API_URL: APP_CONFIG.apiUrl,
+      API_BASE: APP_CONFIG.apiBase,
+      FETCH_LIST_INTERVALE: APP_CONFIG.fetchInterval
+    }
+  },
+
+  srcDir: 'src/',
+
+  ssr: false,
+
+  typescript: {typeCheck: true, strict: true},
+
   vite: {
     vue: {
       template: {
@@ -48,24 +66,10 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/api': {
-          target: 'http://127.0.0.1:8080/',
+          target: APP_CONFIG.apiUrl,
           changeOrigin: true
-        },
-        '/camera': {
-          target: 'http://127.0.0.1:8888/',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/camera/, '')
         }
       }
     }
-  },
-
-  app: {
-    head: {
-      title: 'Magasin',
-      link: [{rel: 'icon', type: 'image/svg+xml', href: 'favicon.svg'}]
-    }
-  },
-
-  compatibilityDate: '2024-07-25'
+  }
 })
