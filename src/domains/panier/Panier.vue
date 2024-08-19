@@ -23,15 +23,11 @@
   })
 
   function handleClickAdd(item: ItemPanier) {
-    if (!isProduitOutOfStock(item.produit.nom)) {
-      addToPanier(item.produit)
-    }
+    addToPanier(item.produit)
   }
 
   function handleClickRemove(item: ItemPanier) {
-    if (!isProduitOutOfStock(item.produit.nom)) {
-      subtractToPanier(item.produit)
-    }
+    subtractToPanier(item.produit)
   }
 
   function itemProps(client: Client) {
@@ -71,7 +67,7 @@
                   size="small"
                   variant="text"
                   @click="handleClickAdd(item)"
-                  :disabled="isProduitOutOfStock(item)"
+                  :disabled="isProduitOutOfStock(item.produit.nom)"
                 />
                 <VBtn
                   title="Retirer"

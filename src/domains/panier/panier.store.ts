@@ -37,7 +37,7 @@ export const usePanierStore = defineStore('panier', () => {
     const produit = findProduitInStock(nom)
     const item = items.value.find((e) => e.produit.nom === nom)
     if (produit && item) {
-      return produit?.stock < item.quantite
+      return produit?.stock <= item.quantite
     } else {
       return false
     }
