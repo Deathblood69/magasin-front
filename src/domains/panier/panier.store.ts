@@ -74,7 +74,7 @@ export const usePanierStore = defineStore('panier', () => {
     const path = `/${ENTITIES.panier}/${selectedClient.value?.id}/valider`
     await useFetchService(path, {
       method: METHODE_HTTP.POST,
-      body: items,
+      body: items.value,
       onResponse() {
         open.value = false
         openSnackbar('Panier validé', {
