@@ -3,5 +3,7 @@ export enum ENTITIES {
   client = 'client',
   produit = 'produit',
   typeProduit = 'typeProduit',
-  panier = 'panier'
+  panier = 'panier',
+  course = 'course',
+  achat = 'achat'
 }

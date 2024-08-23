@@ -3,6 +3,7 @@
   import TableauProduit from '~/domains/produit/TableauProduit.vue'
   import TableauClient from '~/domains/client/TableauClient.vue'
   import TableauTypeProduit from '~/domains/typeProduit/TableauTypeProduit.vue'
+  import TableauCourse from '~/domains/course/TableauCourse.vue'
 
   definePageMeta({
     layout: 'admin'
@@ -15,7 +16,8 @@
     clients: TableauClient,
     produits: TableauProduit,
     'type-produit': TableauTypeProduit,
-    utilisateurs: TableauUtilisateurs
+    utilisateurs: TableauUtilisateurs,
+    courses: TableauCourse
   }
 </script>
 

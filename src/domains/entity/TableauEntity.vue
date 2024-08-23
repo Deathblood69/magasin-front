@@ -68,14 +68,18 @@
 
 <template>
   <VCard width="95%">
-    <VCardTitle class="text-right">
-      <VBtn
-        color="primary"
-        prepend-icon="mdi-plus"
-        text="Ajouter"
-        variant="flat"
-        @click="openDialogCreate"
-      />
+    <VCardTitle>
+      <slot name="title">
+        <div class="text-right">
+          <VBtn
+            color="primary"
+            prepend-icon="mdi-plus"
+            text="Ajouter"
+            variant="flat"
+            @click="openDialogCreate"
+          />
+        </div>
+      </slot>
     </VCardTitle>
     <VCardText>
       <AppDataTable

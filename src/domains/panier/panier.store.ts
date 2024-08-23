@@ -60,7 +60,7 @@ export const usePanierStore = defineStore('panier', () => {
     const item = items.value.find((e) => e.produit.nom === produit.nom)
     if (item && item?.quantite > 1) {
       item.quantite--
-      openSnackbar('Produit retiré du panier', {
+      openSnackbar('Achat retiré du panier', {
         color: 'success',
         timeout: 2000
       })

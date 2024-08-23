@@ -11,6 +11,11 @@ export const LIENS_MENU: LienMenuInterface[] = [
     icon: 'mdi-view-dashboard'
   },
   {
+    to: PAGES.courses,
+    title: 'Courses',
+    icon: 'mdi-cart-outline'
+  },
+  {
     to: PAGES.clients,
     title: 'Clients',
     icon: 'mdi-account-cash'

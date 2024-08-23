@@ -8,6 +8,10 @@ export const PAGES_ROLES = {
     path: PAGES.administration,
     roles: [ROLES.ADMINISTRATEUR.value]
   },
+  courses: {
+    path: PAGES.courses,
+    roles: [ROLES.ADMINISTRATEUR.value]
+  },
   clients: {
     path: PAGES.clients,
     roles: [ROLES.ADMINISTRATEUR.value]

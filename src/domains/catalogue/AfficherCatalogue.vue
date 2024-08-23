@@ -33,7 +33,7 @@
     const produit = findProduitInStock(item.title)
     if (produit) {
       addToPanier(produit)
-      openSnackbar('Produit ajouté au panier', {
+      openSnackbar('Achat ajouté au panier', {
         color: 'success',
         timeout: 2000
       })
