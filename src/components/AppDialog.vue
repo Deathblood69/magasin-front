@@ -3,7 +3,7 @@
 
   const dialog = defineModel({
     type: Boolean,
-    default: false,
+    default: false
   })
 </script>
 
@@ -11,7 +11,7 @@
   <VDialog
     v-model="dialog"
     persistent
-    @close="console.log('test')"
+    size="unset"
   >
     <slot />
   </VDialog>
