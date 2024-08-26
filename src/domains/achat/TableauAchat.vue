@@ -19,9 +19,9 @@
 
   const achatsStore = useEntityStore<Achat>(ENTITIES.achat)
   const {selected: selectedAchat, entities: achats} = storeToRefs(achatsStore)
-  const {refreshData, sauvegarderEntity} = achatsStore
+  const {refreshData, sauvegarderEntity, supprimerEntity} = achatsStore
 
-  const achatForm = ref<Achat>(DEFAULT_ACHAT)
+  const achatForm = ref<Achat>(JSON.parse(JSON.stringify(DEFAULT_ACHAT)))
 
   const filteredAchats = computed(() => {
     return (
@@ -36,14 +36,32 @@
     )
   })
 
+  function resetForm() {
+    achatForm.value = JSON.parse(JSON.stringify(DEFAULT_ACHAT))
+  }
+
   function handleFindProduit(id: string) {
     return produits.value?.find((e) => e.id === id)?.nom
   }
 
   async function handleAddAchat() {
-    selectedAchat.value = achatForm.value
+    selectedAchat.value = {
+      id: '',
+      course: props.course.id,
+      produit: achatForm.value.produit,
+      prix: achatForm.value.prix,
+      stock: achatForm.value.stock
+    }
     await sauvegarderEntity()
     await refreshData()
+    resetForm()
+  }
+
+  async function handleDeleteAchat(item: Achat) {
+    selectedAchat.value = item
+    await supprimerEntity()
+    await refreshData()
+    resetForm()
   }
 
   function handleEditAchat(item: Achat) {
@@ -95,6 +113,14 @@
           variant="text"
           @click="handleEditAchat(item)"
           title="Modifier"
+        />
+        <VBtn
+          aria-label="delete"
+          icon="mdi-delete"
+          size="small"
+          variant="text"
+          @click="handleDeleteAchat(item)"
+          title="Supprimer"
         />
       </VBtnGroup>
     </template>
