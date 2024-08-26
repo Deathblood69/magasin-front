@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  import AuthLogin from '~/domains/auth/AuthLogin.vue'
+  import AuthLogin from '~/auth/AuthLogin.vue'
 
   definePageMeta({
-    layout: 'auth',
+    layout: 'auth'
   })
 </script>
 
 <template>
-  <AuthLogin/>
+  <AuthLogin />
 </template>

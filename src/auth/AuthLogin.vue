@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import {useAuthStore} from '~/stores/auth.store'
   import type {CredentialsInterface} from '~/types/credentials'
-  import FormCredentials from '~/domains/auth/FormCredentials.vue'
-  import AuthLoginBtn from '~/domains/auth/AuthLoginBtn.vue'
+  import FormCredentials from '~/auth/FormCredentials.vue'
+  import AuthLoginBtn from '~/auth/AuthLoginBtn.vue'
   import {IMAGES} from 'assets/images/images'
   import {PAGES} from '~/constants/pages.const'
 

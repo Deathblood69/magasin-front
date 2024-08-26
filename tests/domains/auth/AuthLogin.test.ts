@@ -1,29 +1,29 @@
 import {describe, expect, test} from 'vitest'
 import {mount} from '@vue/test-utils'
-import AuthLogin from '~/domains/auth/AuthLogin.vue'
+import AuthLogin from '~/auth/AuthLogin.vue'
 import type {CredentialsInterface} from '~/types/credentials'
 import {createVuetify} from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import AppTextFieldPassword from '~/components/AppTextFieldPassword.vue'
-import AuthLoginBtn from '~/domains/auth/AuthLoginBtn.vue'
+import AuthLoginBtn from '~/auth/AuthLoginBtn.vue'
 
 const vuetify = createVuetify({
   components,
-  directives,
+  directives
 })
 
 const credentials: CredentialsInterface = {
   username: '',
-  password: '',
+  password: ''
 }
 const wrapper = mount(AuthLogin, {
   props: {
-    modelValue: credentials,
+    modelValue: credentials
   },
   global: {
-    plugins: [vuetify],
-  },
+    plugins: [vuetify]
+  }
 })
 
 //Les textfields (Identifiant et Mot de passe)
@@ -87,7 +87,7 @@ describe('Saisies invalides des identifiants', () => {
 
   test("Affichage du message d'erreur", () => {
     expect(wrapper.html()).toContain(
-      'Veuillez saisir des identifiants valides svp.',
+      'Veuillez saisir des identifiants valides svp.'
     )
   })
 })
@@ -122,7 +122,7 @@ describe('Tentative de connexion échouée au bout de 5 fois', () => {
       connectBtn.trigger('click')
       expect(wrapper.emitted('connect'))
       expect(wrapper.html()).toContain(
-        'Veuillez saisir des identifiants valides svp.',
+        'Veuillez saisir des identifiants valides svp.'
       )
     }
     //  TODO: WIP car pas de back connecté (on ne reçoit pas d'erreur de l'API)

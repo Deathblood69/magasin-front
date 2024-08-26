@@ -1,6 +1,6 @@
 import {describe, expect, test} from 'vitest'
 import {mount} from '@vue/test-utils'
-import FormCredentials from '~/domains/auth/FormCredentials.vue'
+import FormCredentials from '~/auth/FormCredentials.vue'
 import type {CredentialsInterface} from '~/types/credentials'
 import {createVuetify} from 'vuetify'
 import * as components from 'vuetify/components'
@@ -9,21 +9,21 @@ import AppTextFieldPassword from '~/components/AppTextFieldPassword.vue'
 
 const vuetify = createVuetify({
   components,
-  directives,
+  directives
 })
 
 const credentials: CredentialsInterface = {
   username: '',
-  password: '',
+  password: ''
 }
 
 const wrapper = mount(FormCredentials, {
   props: {
-    modelValue: credentials,
+    modelValue: credentials
   },
   global: {
-    plugins: [vuetify],
-  },
+    plugins: [vuetify]
+  }
 })
 
 //Les textfields (Identifiant et Mot de passe)
@@ -67,7 +67,7 @@ describe('Tests des erreurs du champ identifiant', () => {
     await TFident.setValue('')
     await TFident.trigger('blur')
     expect(wrapper.find('.v-messages__message').text()).toEqual(
-      'Ce champ est requis !',
+      'Ce champ est requis !'
     )
   })
 
@@ -88,7 +88,7 @@ describe('Tests des erreurs du champ mot de passe', () => {
     await TFpassw.setValue('')
     await TFpassw.trigger('blur')
     expect(wrapper.find('.v-messages__message').text()).toEqual(
-      'Ce champ est requis !',
+      'Ce champ est requis !'
     )
   })
 
