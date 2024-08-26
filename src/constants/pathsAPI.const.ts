@@ -8,5 +8,6 @@ export enum PATHS_API {
   utilisateur = '/user',
   produit = '/produit',
   client = '/client',
-  solde = '/solde'
+  solde = '/solde',
+  benefice = '/benefice'
 }

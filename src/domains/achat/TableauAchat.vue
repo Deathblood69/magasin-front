@@ -46,7 +46,6 @@
 
   async function handleAddAchat() {
     selectedAchat.value = {
-      id: '',
       course: props.course.id,
       produit: achatForm.value.produit,
       prix: achatForm.value.prix,
