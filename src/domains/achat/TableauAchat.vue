@@ -14,6 +14,13 @@
 
   const props = defineProps<Props>()
 
+  const courseStore = useEntityStore<Course>(ENTITIES.produit)
+  const {selected: selectedCourse} = storeToRefs(courseStore)
+  const {
+    sauvegarderEntity: sauvegarderCourse,
+    supprimerEntity: supprimerCourse
+  } = courseStore
+
   const produitsStore = useEntityStore<Produit>(ENTITIES.produit)
   const {entities: produits} = storeToRefs(produitsStore)
 
@@ -41,19 +48,28 @@
   }
 
   function handleFindProduit(id: string) {
-    return produits.value?.find((e) => e.id === id)?.nom
+    return produits.value?.find((e) => e.id === id)
   }
 
   async function handleAddAchat() {
-    selectedAchat.value = {
-      course: props.course.id,
-      produit: achatForm.value.produit,
-      prix: achatForm.value.prix,
-      stock: achatForm.value.stock
+    const course = props.course.id
+    const produit = achatForm.value.produit
+    if (!course) {
+      selectedCourse.value = props.course
+      await sauvegarderCourse()
     }
-    await sauvegarderEntity()
-    await refreshData()
-    resetForm()
+    if (course && produit) {
+      selectedAchat.value = {
+        id: achatForm.value?.id,
+        course: course,
+        produit: produit?.id ?? produit,
+        prix: achatForm.value.prix,
+        stock: achatForm.value.stock
+      }
+      await sauvegarderEntity()
+      await refreshData()
+      resetForm()
+    }
   }
 
   async function handleDeleteAchat(item: Achat) {
@@ -66,7 +82,7 @@
   function handleEditAchat(item: Achat) {
     achatForm.value = {
       ...item,
-      produit: handleFindProduit(item.produit) ?? item.produit
+      produit: handleFindProduit(item.produit)
     }
   }
 </script>
@@ -80,10 +96,16 @@
     />
     <VBtn
       color="primary"
-      icon="mdi-plus"
+      :icon="achatForm.id ? 'mdi-content-save' : 'mdi-plus'"
       rounded="0"
       size="small"
       @click="handleAddAchat"
+    />
+    <VBtn
+      icon="mdi-close"
+      rounded="0"
+      size="small"
+      @click="resetForm"
     />
   </div>
   <AppDataTableVirtual
@@ -91,7 +113,7 @@
     :items="filteredAchats"
   >
     <template #produit="{value}">
-      {{ handleFindProduit(value) }}
+      {{ handleFindProduit(value)?.nom }}
     </template>
     <template #stock="{value}">
       <VChip>

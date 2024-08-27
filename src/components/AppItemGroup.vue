@@ -1,22 +1,10 @@
 <script setup lang="ts">
-  import type {ItemGroup} from '~/types/itemGroup'
-
   interface Props {
-    items: ItemGroup[]
+    items: any[]
     defautImage: string
   }
 
   defineProps<Props>()
-
-  interface Emits {
-    (e: 'click', item: ItemGroup): void
-  }
-
-  const emit = defineEmits<Emits>()
-
-  function handleClick(item: ItemGroup) {
-    emit('click', item)
-  }
 </script>
 
 <template>
@@ -28,10 +16,7 @@
           :key="item.title"
         >
           <VItem>
-            <VCard
-              @click="handleClick(item)"
-              width="200"
-            >
+            <VCard width="200">
               <VCardText class="d-flex justify-center align-center">
                 <VImg
                   :src="item.image ?? defautImage"
@@ -42,12 +27,12 @@
               <VCardTitle
                 class="d-flex flex-column justify-center align-center"
               >
-                <div>
-                  {{ item.title }}
-                </div>
-                <div>
-                  {{ item.description }}
-                </div>
+                <slot
+                  name="item"
+                  :item="item"
+                >
+                  {{ item }}
+                </slot>
               </VCardTitle>
               <VCardActions class="d-flex justify-center align-center">
                 <slot

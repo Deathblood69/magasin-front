@@ -2,9 +2,9 @@
   import {usePanierStore} from '~/domains/panier/panier.store'
   import {useEntityStore} from '~/domains/entity/entity.store'
   import {ENTITIES} from '~/domains/entities'
-  import type {ItemPanier} from '~/domains/panier/itemPanier'
   import type {Client} from '~/domains/client/client'
   import {panierHeaders} from '~/domains/panier/panierHeaders'
+  import type {ItemPanier} from '~/domains/panier/itemPanier'
 
   const storeEntity = useEntityStore<Client>(ENTITIES.client)
   const {entities: clients, selected: selectedClient} = storeToRefs(storeEntity)
@@ -23,11 +23,11 @@
   })
 
   function handleClickAdd(item: ItemPanier) {
-    addToPanier(item.produit)
+    addToPanier(item.catalogue, 1)
   }
 
   function handleClickRemove(item: ItemPanier) {
-    subtractToPanier(item.produit)
+    subtractToPanier(item.catalogue, 1)
   }
 
   function itemProps(client: Client) {
@@ -35,6 +35,10 @@
       title: `${client.nom} ${client.prenom}`,
       subtitle: `${client.solde}€`
     }
+  }
+
+  function totalPrixItem(item: ItemPanier) {
+    return item.catalogue.prix * item.stock
   }
 </script>
 
@@ -58,6 +62,9 @@
             :headers="panierHeaders"
             :items="items"
           >
+            <template #total="{item}">
+              {{ totalPrixItem(item) }}
+            </template>
             <template #actions="{item}">
               <VBtnGroup>
                 <VBtn
@@ -67,7 +74,7 @@
                   size="small"
                   variant="text"
                   @click="handleClickAdd(item)"
-                  :disabled="isProduitOutOfStock(item.produit.nom)"
+                  :disabled="isProduitOutOfStock(item)"
                 />
                 <VBtn
                   title="Retirer"

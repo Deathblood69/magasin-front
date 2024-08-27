@@ -1,6 +1,6 @@
-import type {Produit} from '~/domains/produit/produit'
+import type {Catalogue} from '~/domains/catalogue/catalogue'
 
 export interface ItemPanier {
-  produit: Produit
-  quantite: number
+  catalogue: Catalogue
+  stock: number
 }

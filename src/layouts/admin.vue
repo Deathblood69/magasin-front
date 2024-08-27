@@ -50,7 +50,7 @@
               v-if="!expandBtnValue"
               align="center"
             >
-              {{ app.TITRE }}
+              {{ expandBtnValue ? '' : app.TITRE }}
             </div>
           </VContainer>
         </template>

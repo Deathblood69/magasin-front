@@ -5,5 +5,6 @@ export enum ENTITIES {
   typeProduit = 'typeProduit',
   panier = 'panier',
   course = 'course',
-  achat = 'achat'
+  achat = 'achat',
+  catalogue = 'catalogue'
 }

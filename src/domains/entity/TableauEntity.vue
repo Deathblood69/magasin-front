@@ -15,6 +15,13 @@
 
   const props = defineProps<Props>()
 
+  type Emits = {
+    valider: [T]
+    annuler: []
+  }
+
+  const emit = defineEmits<Emits>()
+
   const storeEntity = useEntityStore<T>(props.entity)
   const {
     entities: entities,
@@ -55,13 +62,15 @@
     openDialog.value = false
   }
 
-  function handleValider() {
-    sauvegarderEntity()
+  async function handleValider() {
+    await sauvegarderEntity()
+    emit('valider', selectedEntity.value)
     closeDialog()
   }
 
-  function handleSupprimer() {
-    supprimerEntity()
+  async function handleSupprimer() {
+    await supprimerEntity()
+    emit('annuler')
     closeDialog()
   }
 </script>

@@ -64,6 +64,15 @@ export const useEntityStore = <T extends AbstractEntity>(entity: string) =>
       }
     }
 
+    async function findEntity(id: string) {
+      if (id) {
+        const {data} = await useFetchService<T>(`/${entity}/${id}/id`, {
+          method: METHODE_HTTP.GET
+        })
+        return data.value as Promise<T>
+      }
+    }
+
     async function supprimerEntity() {
       if (selected.value) {
         await useFetchService(`/${entity}/${selected.value?.id}/id`, {
@@ -82,6 +91,7 @@ export const useEntityStore = <T extends AbstractEntity>(entity: string) =>
       forceRefresh: refreshGetAll,
       error: errorGetAll,
       sauvegarderEntity,
-      supprimerEntity
+      supprimerEntity,
+      findEntity
     }
   })()

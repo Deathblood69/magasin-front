@@ -8,7 +8,7 @@
   import {PATHS_API} from '~/constants/pathsAPI.const'
   import type {Benefice} from '~/domains/benefice/benefice'
 
-  const {data: benefices} = await useFetchService<Benefice[]>(
+  const {data: benefices, refresh} = await useFetchService<Benefice[]>(
     `${PATHS_API.benefice}/all`
   )
 
@@ -27,6 +27,7 @@
     :entity="ENTITIES.course"
     :default-entity="DEFAULT_COURSE"
     :headers="courseHeaders"
+    @valider="refresh"
   >
     <template #benefice="{item}">
       <VChip> {{ handleFindBenefice(item) }}</VChip>

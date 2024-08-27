@@ -1,13 +1,17 @@
-import type {ItemPanier} from '~/domains/panier/itemPanier'
 import type {Produit} from '~/domains/produit/produit'
 import {useEntityStore} from '~/domains/entity/entity.store'
 import {ENTITIES} from '~/domains/entities'
 import {useFetchService} from '~/composables/useFetchService'
 import {METHODE_HTTP} from '~/constants/methodeHTTP.const'
 import type {Client} from '~/domains/client/client'
+import {useCatalogueStore} from '~/domains/catalogue/catalogue.store'
+import type {Catalogue} from '~/domains/catalogue/catalogue'
+import type {ItemPanier} from '~/domains/panier/itemPanier'
 
 export const usePanierStore = defineStore('panier', () => {
   const {openSnackbar} = useSnackbarStore()
+
+  const {findByProduitNom} = useCatalogueStore()
 
   const storeProduit = useEntityStore<Produit>(ENTITIES.produit)
   const {entities: produits} = storeToRefs(storeProduit)
@@ -22,50 +26,63 @@ export const usePanierStore = defineStore('panier', () => {
   const items = ref<ItemPanier[]>([])
 
   const nombreItems = computed(() => {
+    console.log(items)
     return items.value.reduce((sum, item) => {
-      return sum + item.quantite
+      return sum + item.stock
     }, 0)
   })
 
   const totalPrix = computed(() => {
     return items.value.reduce((sum, item) => {
-      return sum + item.produit.prix * item.quantite
+      const catalogue = findByProduitNom(item.catalogue.nom)
+      if (catalogue) {
+        return sum + catalogue?.prix * item.stock
+      } else {
+        return sum
+      }
     }, 0)
   })
 
-  function isProduitOutOfStock(nom: string) {
-    const produit = findProduitInStock(nom)
-    const item = items.value.find((e) => e.produit.nom === nom)
+  function findItemByNom(nom: string) {
+    return items.value.find((e) => e.catalogue.nom === nom)
+  }
+
+  function isProduitOutOfStock(catalogue: Catalogue) {
+    const produit = findProduitbyNom(catalogue.nom)
+    const item = findItemByNom(catalogue.nom)
     if (produit && item) {
-      return produit?.stock <= item.quantite
+      const catalogue = findByProduitNom(item.catalogue.nom)
+      if (catalogue) {
+        return catalogue?.stock <= item.stock
+      }
     } else {
       return false
     }
   }
 
-  function findProduitInStock(nom: string) {
+  function findProduitbyNom(nom: string) {
     return produits.value?.find((e) => e.nom === nom)
   }
 
-  function addToPanier(produit: Produit) {
-    const item = items.value.find((e) => e.produit.nom === produit.nom)
+  function addToPanier(catalogue: Catalogue, quantite: number) {
+    const item = findItemByNom(catalogue.nom)
     if (item) {
-      item.quantite++
+      item.stock += quantite
     } else {
-      items.value.push({produit, quantite: 1})
+      items.value.push({catalogue, stock: 1})
     }
   }
 
-  function subtractToPanier(produit: Produit) {
-    const item = items.value.find((e) => e.produit.nom === produit.nom)
-    if (item && item?.quantite > 1) {
-      item.quantite--
+  function subtractToPanier(catalogue: Catalogue, quantite: number) {
+    const item = findItemByNom(catalogue.nom)
+    if (item && item?.stock > 1) {
+      item.stock -= quantite
       openSnackbar('Achat retiré du panier', {
         color: 'success',
         timeout: 2000
       })
     } else {
-      items.value = items.value.filter((e) => e.produit.nom !== produit.nom)
+      items.value = items.value.filter((e) => e.catalogue.nom !== catalogue.nom)
       open.value = false
     }
   }
@@ -100,7 +117,7 @@ export const usePanierStore = defineStore('panier', () => {
     nombreItems,
     totalPrix,
     isProduitOutOfStock,
-    findProduitInStock,
+    findProduitInStock: findProduitbyNom,
     addToPanier,
     subtractToPanier,
     validerPanier

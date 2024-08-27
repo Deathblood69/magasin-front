@@ -1,38 +1,22 @@
 <script setup lang="ts">
-  import type {ItemGroup} from '~/types/itemGroup'
-  import {IMAGES} from 'assets/images/images'
   import {usePanierStore} from '~/domains/panier/panier.store'
-  import type {Produit} from '~/domains/produit/produit'
-  import {ENTITIES} from '~/domains/entities'
-  import {useEntityStore} from '~/domains/entity/entity.store'
+  import {PATHS_API} from '~/constants/pathsAPI.const'
+  import type {Catalogue} from '~/domains/catalogue/catalogue'
 
   const {openSnackbar} = useSnackbarStore()
 
-  const storeEntity = useEntityStore<Produit>(ENTITIES.produit)
-  const {entities: produits} = storeToRefs(storeEntity)
+  const {data: items} = useFetchService<Catalogue[]>(
+    `${PATHS_API.catalogue}/all`
+  )
 
   const storePanier = usePanierStore()
   const {isProduitOutOfStock, findProduitInStock, addToPanier} = storePanier
 
-  const items = computed(() => {
-    return (
-      produits.value?.map((e) => {
-        return {
-          title: e.nom,
-          description: `${e.prix}€`,
-          image: IMAGES.defautSoft,
-          disabled: e.stock === 0
-        } as ItemGroup satisfies ItemGroup
-      }) ?? []
-    )
-  })
-
   /** LIFECYCLE **/
 
-  function handleClickAdd(item: ItemGroup) {
-    const produit = findProduitInStock(item.title)
-    if (produit) {
-      addToPanier(produit)
+  function handleClickAdd(item: Catalogue) {
+    if (item) {
+      addToPanier(item, 1)
       openSnackbar('Achat ajouté au panier', {
         color: 'success',
         timeout: 2000
@@ -43,14 +27,23 @@
 
 <template>
   <AppItemGroup
+    v-if="items"
     :items="items"
     defautImage="~/assets/images/defautSoft.svg"
   >
+    <template #item="{item}">
+      <div>
+        {{ item.nom }}
+      </div>
+      <div>
+        {{ `${item.prix}€` }}
+      </div>
+    </template>
     <template #actions="{item}">
       <VBtn
         icon="mdi-cart-variant"
         @click="handleClickAdd(item)"
-        :disabled="item.disabled || isProduitOutOfStock(item.title)"
+        :disabled="isProduitOutOfStock(item)"
       />
     </template>
   </AppItemGroup>
