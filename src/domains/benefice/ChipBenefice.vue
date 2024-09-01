@@ -14,12 +14,20 @@
       return 0
     }
   })
+
+  const styleBenefice = computed(() => {
+    if (valeurBenefice.value < 0) {
+      return 'color:red'
+    } else if (valeurBenefice.value > 0) {
+      return 'color:green'
+    } else {
+      return ''
+    }
+  })
 </script>
 
 <template>
-  <VChip :style="valeurBenefice > 0 ? 'color:green' : 'color:red'"
-    >{{ valeurBenefice }}{{ '€' }}
-  </VChip>
+  <VChip :style="styleBenefice">{{ valeurBenefice }}{{ '€' }} </VChip>
 </template>
 
 <style scoped></style>
