@@ -2,7 +2,7 @@ import type {Catalogue} from '~/domains/catalogue/catalogue'
 import {PATHS_API} from '~/constants/pathsAPI.const'
 
 export const useCatalogueStore = defineStore('catalogue', () => {
-  const {data: entities} = useFetchService<Catalogue[]>(
+  const {data: entities, refresh} = useFetchService<Catalogue[]>(
     `${PATHS_API.catalogue}/all`
   )
 
@@ -10,5 +10,5 @@ export const useCatalogueStore = defineStore('catalogue', () => {
     return entities.value?.find((e) => e.nom === nom)
   }
 
-  return {entities, findByProduitNom}
+  return {entities, refresh, findByProduitNom}
 })

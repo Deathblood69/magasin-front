@@ -12,7 +12,7 @@ import {PATHS_API} from '~/constants/pathsAPI.const'
 export const usePanierStore = defineStore('panier', () => {
   const {openSnackbar} = useSnackbarStore()
 
-  const {findByProduitNom} = useCatalogueStore()
+  const {findByProduitNom, refresh: refreshCatalogue} = useCatalogueStore()
 
   const storeProduit = useEntityStore<Produit>(ENTITIES.produit)
   const {entities: produits} = storeToRefs(storeProduit)
@@ -47,14 +47,22 @@ export const usePanierStore = defineStore('panier', () => {
     }, 0)
   })
 
+  const items: Catalogue[] = []
   const itemsCatalogue = computed(() => {
-    return getItemsCatalogue.value?.map((e) => {
-      const produit = produits.value?.find((produit) => produit.nom === e.nom)
-      return {
-        ...e,
-        prix: produit?.prix
+    return getItemsCatalogue.value?.reduce((acc, e) => {
+      const index = acc.findIndex((item) => item.nom === e.nom)
+      if (index === -1) {
+        const produit = produits.value?.find((produit) => produit.nom === e.nom)
+        acc.push({
+          ...e,
+          prix: produit?.prix ?? -1
+        })
+      } else {
+        console.log(acc, index)
+        acc[index].stock += e.stock
       }
-    })
+      return acc
+    }, items)
   })
 
   function findItemByNom(nom: string) {
@@ -62,16 +70,17 @@ export const usePanierStore = defineStore('panier', () => {
   }
 
   function isProduitOutOfStock(catalogue: Catalogue) {
-    const produit = findProduitbyNom(catalogue.nom)
-    const item = findItemByNom(catalogue.nom)
-    if (produit && item) {
-      const catalogue = findByProduitNom(item.catalogue.nom)
-      if (catalogue) {
-        return catalogue?.stock <= item.stock
-      }
+    const itemPanier = itemsPanier.value.find(
+      (e) => e.catalogue.nom === catalogue.nom
+    )
+    if (!itemPanier) {
+      return catalogue?.stock <= 0
     } else {
-      return false
+      if (itemPanier) {
+        return itemPanier.stock >= catalogue.stock
+      }
     }
+    return false
   }
 
   function findProduitbyNom(nom: string) {
@@ -125,6 +134,7 @@ export const usePanierStore = defineStore('panier', () => {
     })
     await refreshClient()
     await refreshProduit()
+    await refreshCatalogue()
   }
 
   return {

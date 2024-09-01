@@ -121,6 +121,10 @@
                 @click="openDialogDelete(props.item)"
                 title="Supprimer"
               />
+              <slot
+                name="actions"
+                :item="props.item"
+              />
             </VBtnGroup>
           </slot>
           <slot
