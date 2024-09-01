@@ -9,6 +9,12 @@
   }
 
   defineProps<Props>()
+
+  const router = useRouter()
+
+  function handleNavigate(route: string) {
+    router.push(route)
+  }
 </script>
 <template>
   <VNavigationDrawer
@@ -32,11 +38,11 @@
           <VListItem
             v-bind="props"
             :title="item.title"
-            :to="item.to"
             :prepend-icon="item.icon"
             height="50px"
             color="selected-text"
             active-class="bg-primary border-t-sm border-b-sm"
+            @click.prevent.stop="handleNavigate(item.to)"
           />
         </template>
         <span>{{ item.title }}</span>

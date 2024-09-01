@@ -34,9 +34,10 @@
       <AppNavigationDrawer
         :rail="rail"
         :items="LIENS_MENU"
+        @click="toggleRail"
       >
         <template #prepend>
-          <VContainer @click="toggleRail">
+          <VContainer>
             <VImg
               :src="IMAGES.logo"
               max-height="150px"
@@ -56,7 +57,7 @@
             :block="true"
             size="large"
             variant="text"
-            @click="handleGoAccueil"
+            @click.prevent.stop="handleGoAccueil"
           />
         </template>
       </AppNavigationDrawer>
