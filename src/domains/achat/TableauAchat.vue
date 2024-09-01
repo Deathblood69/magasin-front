@@ -34,7 +34,9 @@
 
   onBeforeMount(async () => {
     await refreshData()
-    achats.value = entities.value
+    if (props.course?.id && entities.value) {
+      achats.value = entities.value.filter((e) => e.course === props.course?.id)
+    }
   })
 
   function findProduitNameById(achat: Achat) {
@@ -112,6 +114,11 @@
         :itemsLength="achats.length"
       >
         <template #produit="{item}"> {{ findProduitNameById(item) }}</template>
+        <template #prix="{value}">
+          <VChip>
+            {{ `${value}€` }}
+          </VChip>
+        </template>
         <template #actions="{item}">
           <VBtnGroup>
             <VBtn
