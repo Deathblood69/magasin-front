@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import type {Produit} from './produit'
   import type {TypeProduit} from '~/domains/typeProduit/typeProduit'
+  import {VALIDATIONS_RULES} from '~/constants/validationsRules.const'
 
   /** === PROPS === */
 
@@ -28,6 +29,13 @@
     :items="typeProduits"
     item-title="nom"
     item-value="id"
+  />
+  <VTextField
+    id="prix-field"
+    label="Prix"
+    v-model="model.prix"
+    suffix="€"
+    :rules="[VALIDATIONS_RULES.onlyNumber]"
   />
 </template>
 

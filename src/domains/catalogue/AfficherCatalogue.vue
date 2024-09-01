@@ -1,16 +1,12 @@
 <script setup lang="ts">
   import {usePanierStore} from '~/domains/panier/panier.store'
-  import {PATHS_API} from '~/constants/pathsAPI.const'
   import type {Catalogue} from '~/domains/catalogue/catalogue'
 
   const {openSnackbar} = useSnackbarStore()
 
-  const {data: items} = useFetchService<Catalogue[]>(
-    `${PATHS_API.catalogue}/all`
-  )
-
   const storePanier = usePanierStore()
   const {isProduitOutOfStock, findProduitInStock, addToPanier} = storePanier
+  const {itemsCatalogue} = storeToRefs(storePanier)
 
   /** LIFECYCLE **/
 
@@ -27,8 +23,8 @@
 
 <template>
   <AppItemGroup
-    v-if="items"
-    :items="items"
+    v-if="itemsCatalogue"
+    :items="itemsCatalogue"
     defautImage="~/assets/images/defautSoft.svg"
   >
     <template #item="{item}">

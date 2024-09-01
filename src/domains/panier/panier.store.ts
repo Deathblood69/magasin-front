@@ -7,6 +7,7 @@ import type {Client} from '~/domains/client/client'
 import {useCatalogueStore} from '~/domains/catalogue/catalogue.store'
 import type {Catalogue} from '~/domains/catalogue/catalogue'
 import type {ItemPanier} from '~/domains/panier/itemPanier'
+import {PATHS_API} from '~/constants/pathsAPI.const'
 
 export const usePanierStore = defineStore('panier', () => {
   const {openSnackbar} = useSnackbarStore()
@@ -21,19 +22,22 @@ export const usePanierStore = defineStore('panier', () => {
   const {selected: selectedClient} = storeToRefs(storeClient)
   const {refreshData: refreshClient} = storeClient
 
+  const {data: getItemsCatalogue} = useFetchService<Catalogue[]>(
+    `${PATHS_API.catalogue}/all`
+  )
+
   const open = ref<boolean>()
 
-  const items = ref<ItemPanier[]>([])
+  const itemsPanier = ref<ItemPanier[]>([])
 
   const nombreItems = computed(() => {
-    console.log(items)
-    return items.value.reduce((sum, item) => {
+    return itemsPanier.value.reduce((sum, item) => {
       return sum + item.stock
     }, 0)
   })
 
   const totalPrix = computed(() => {
-    return items.value.reduce((sum, item) => {
+    return itemsPanier.value.reduce((sum, item) => {
       const catalogue = findByProduitNom(item.catalogue.nom)
       if (catalogue) {
         return sum + catalogue?.prix * item.stock
@@ -43,8 +47,18 @@ export const usePanierStore = defineStore('panier', () => {
     }, 0)
   })
 
+  const itemsCatalogue = computed(() => {
+    return getItemsCatalogue.value?.map((e) => {
+      const produit = produits.value?.find((produit) => produit.nom === e.nom)
+      return {
+        ...e,
+        prix: produit?.prix
+      }
+    })
+  })
+
   function findItemByNom(nom: string) {
-    return items.value.find((e) => e.catalogue.nom === nom)
+    return itemsPanier.value.find((e) => e.catalogue.nom === nom)
   }
 
   function isProduitOutOfStock(catalogue: Catalogue) {
@@ -69,7 +83,7 @@ export const usePanierStore = defineStore('panier', () => {
     if (item) {
       item.stock += quantite
     } else {
-      items.value.push({catalogue, stock: 1})
+      itemsPanier.value.push({catalogue, stock: 1, prix: catalogue.prix})
     }
   }
 
@@ -82,7 +96,9 @@ export const usePanierStore = defineStore('panier', () => {
         timeout: 2000
       })
     } else {
-      items.value = items.value.filter((e) => e.catalogue.nom !== catalogue.nom)
+      itemsPanier.value = itemsPanier.value.filter(
+        (e) => e.catalogue.nom !== catalogue.nom
+      )
       open.value = false
     }
   }
@@ -91,14 +107,14 @@ export const usePanierStore = defineStore('panier', () => {
     const path = `/${ENTITIES.panier}/${selectedClient.value?.id}/valider`
     await useFetchService(path, {
       method: METHODE_HTTP.POST,
-      body: items.value,
+      body: itemsPanier.value,
       onResponse() {
         open.value = false
         openSnackbar('Panier validé', {
           color: 'success',
           timeout: 2000
         })
-        items.value = []
+        itemsPanier.value = []
       },
       onResponseError(): Promise<void> | void {
         openSnackbar('Erreur lors de la validation du panier', {
@@ -113,7 +129,8 @@ export const usePanierStore = defineStore('panier', () => {
 
   return {
     open,
-    items,
+    itemsCatalogue,
+    itemsPanier,
     nombreItems,
     totalPrix,
     isProduitOutOfStock,

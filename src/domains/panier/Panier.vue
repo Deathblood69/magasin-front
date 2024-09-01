@@ -10,13 +10,13 @@
   const {entities: clients, selected: selectedClient} = storeToRefs(storeEntity)
 
   const storePanier = usePanierStore()
-  const {open, items, nombreItems, totalPrix} = storeToRefs(storePanier)
+  const {open, itemsPanier, nombreItems, totalPrix} = storeToRefs(storePanier)
   const {isProduitOutOfStock, addToPanier, subtractToPanier, validerPanier} =
     storePanier
 
   const disabledPanier = computed(() => {
     if (selectedClient.value && totalPrix.value) {
-      return selectedClient.value?.solde < totalPrix.value
+      return selectedClient.value?.solde <= totalPrix.value
     } else {
       return true
     }
@@ -60,7 +60,7 @@
         <VListItem>
           <AppDataTableVirtual
             :headers="panierHeaders"
-            :items="items"
+            :items="itemsPanier"
           >
             <template #total="{item}">
               {{ totalPrixItem(item) }}
