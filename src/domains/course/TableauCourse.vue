@@ -5,32 +5,21 @@
   import {DEFAULT_COURSE} from '~/domains/course/courseDefault.const'
   import type {Course} from '~/domains/course/course'
   import FormCourse from '~/domains/course/FormCourse.vue'
-  import {PATHS_API} from '~/constants/pathsAPI.const'
-  import type {Benefice} from '~/domains/benefice/benefice'
+  import ChipBenefice from '~/domains/benefice/ChipBenefice.vue'
+  import {useBeneficeStore} from '~/domains/benefice/benefice.store'
 
-  const {data: benefices, refresh} = await useFetchService<Benefice[]>(
-    `${PATHS_API.benefice}/all`
-  )
-
-  function handleFindBenefice(course: Course) {
-    const benefice = benefices.value?.find(
-      (e) => e.course === course.id
-    )?.benefice
-
-    return `${benefice}€`
-  }
+  const {findBeneficeByCourse} = useBeneficeStore()
 </script>
 
 <template>
   <TableauEntity
-    titre="Produits"
+    titre="Courses"
     :entity="ENTITIES.course"
     :default-entity="DEFAULT_COURSE"
     :headers="courseHeaders"
-    @valider="refresh"
   >
     <template #benefice="{item}">
-      <VChip> {{ handleFindBenefice(item) }}</VChip>
+      <ChipBenefice :benefice="findBeneficeByCourse(item)" />
     </template>
     <template #form="{props}">
       <FormCourse v-model="props.selectedEntity as Course" />

@@ -56,11 +56,13 @@ export const useEntityStore = <T extends AbstractEntity>(entity: string) =>
         mode = METHODE_HTTP.PATCH
       }
       if (selected.value) {
-        await useFetchService<T>(path, {
+        const {data} = await useFetchService<T>(path, {
           method: mode,
           body: selected.value
         })
+
         await refreshData()
+        return data
       }
     }
 

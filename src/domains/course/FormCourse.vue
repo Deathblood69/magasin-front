@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import type {Course} from '~/domains/course/course'
-  import TableauAchat from '~/domains/achat/TableauAchat.vue'
 
   /** === PROPS === */
 
@@ -15,7 +14,6 @@
     label="Nom"
     v-model="model.nom"
   />
-  <TableauAchat :course="model" />
 </template>
 
 <style scoped></style>

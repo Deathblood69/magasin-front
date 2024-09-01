@@ -11,6 +11,11 @@
 
   function handleSupprimer() {
     emit('valider')
+    handleClose()
+  }
+
+  function handleClose() {
+    open.value = false
   }
 </script>
 
@@ -21,9 +26,9 @@
     max-width="500px"
   >
     <AppFormLayout
-      :loading="isLoading"
+      :loading="false"
       title="Suppression"
-      @cancel="closeDeleteDialog"
+      @cancel="handleClose"
       @validate="handleSupprimer"
     >
       <slot />

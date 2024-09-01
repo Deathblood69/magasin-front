@@ -64,7 +64,9 @@
 
   async function handleValider() {
     await sauvegarderEntity()
-    emit('valider', selectedEntity.value)
+    if (selectedEntity.value) {
+      emit('valider', selectedEntity.value)
+    }
     closeDialog()
   }
 

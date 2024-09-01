@@ -5,6 +5,5 @@ import type {Course} from '~/domains/course/course'
  */
 export const DEFAULT_COURSE: Omit<Course, 'id'> = {
   nom: '',
-  stock: 0,
-  prix: 0
+  date: new Date()
 }
