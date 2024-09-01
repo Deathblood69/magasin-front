@@ -6,11 +6,6 @@ import {PAGES} from '~/constants/pages.const'
  */
 export const LIENS_MENU: LienMenuInterface[] = [
   {
-    to: PAGES.administration,
-    title: 'Tableau de Bord',
-    icon: 'mdi-view-dashboard'
-  },
-  {
     to: PAGES.courses,
     title: 'Courses',
     icon: 'mdi-cart-outline'

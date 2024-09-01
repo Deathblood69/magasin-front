@@ -15,7 +15,7 @@
   const {user, logOut} = useAuthStore()
 
   function handleGoSetting() {
-    router.push(PAGES.administration)
+    router.push(PAGES.courses)
   }
 
   function handleLogOut() {
