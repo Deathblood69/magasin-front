@@ -139,7 +139,7 @@
   <FormEntity
     v-if="selectedEntity"
     :title="titre"
-    v-model:entity="selectedEntity as T"
+    v-model:entity="selectedEntity"
     v-model:open="openDialog"
     @change="refreshData"
     @valider="handleValider"

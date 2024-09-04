@@ -46,7 +46,7 @@
   async function handleAddAchat() {
     const index = achats.value.findIndex(
       (e) => e.produit === formAchat.value.produit
-    )
+    ) as number
     if (index !== -1) {
       achats[index] = formAchat.value
     } else {

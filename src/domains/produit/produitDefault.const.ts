@@ -5,5 +5,6 @@ import type {Produit} from '~/domains/produit/produit'
  */
 export const DEFAULT_PRODUIT: Omit<Produit, 'id'> = {
   nom: '',
-  typeProduit: ''
+  typeProduit: '',
+  prix: 0
 }
