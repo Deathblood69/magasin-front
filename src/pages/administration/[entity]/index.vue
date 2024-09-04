@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import {computed} from 'vue'
+  import {useRoute} from 'vue-router'
+
   import TableauUtilisateurs from '~/domains/utilisateur/TableauUtilisateurs.vue'
   import TableauProduit from '~/domains/produit/TableauProduit.vue'
   import TableauClient from '~/domains/client/TableauClient.vue'
@@ -9,20 +12,27 @@
     layout: 'admin'
   })
 
-  const {params} = useRoute()
-  const {entity} = params
+  type PageEntity =
+    | 'clients'
+    | 'produits'
+    | 'type-produit'
+    | 'utilisateurs'
+    | 'courses'
 
-  const pages = {
+  const route = useRoute()
+  const entity = computed(() => route.params.entity as PageEntity)
+
+  const pages: Record<PageEntity, any> = {
     clients: TableauClient,
     produits: TableauProduit,
     'type-produit': TableauTypeProduit,
     utilisateurs: TableauUtilisateurs,
     courses: TableauCourse
   }
+
+  const currentPage = computed(() => pages[entity.value])
 </script>
 
 <template>
-  <component :is="pages[entity]" />
+  <component :is="currentPage" />
 </template>
-
-<style scoped></style>
